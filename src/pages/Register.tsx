@@ -85,7 +85,7 @@ const Register = () => {
                 <select
                   name="typeId"
                   id="typeId"
-                  className=" p-2 border input bg-base-content border-gray-300 rounded w-10 text-gray-950 "
+                  className=" p-2 border input border-gray-300 rounded w-10 text-gray-950 "
                 >
                   <option value="V">V</option>
                   <option value="E">E</option>
@@ -96,7 +96,7 @@ const Register = () => {
                   id="id"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
-                  className="w-80 lg:w-84 p-2 border input validator bg-base-content border-gray-300 rounded text-gray-950"
+                  className="w-80 lg:w-84 p-2 border input validator border-gray-300 rounded text-gray-950"
                   required
                   minLength={6}
                   pattern="[0-9]*"
@@ -116,7 +116,7 @@ const Register = () => {
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-90 lg:w-154 p-2 border validator input bg-base-content border-gray-300 rounded text-gray-950"
+                  className="w-90 lg:w-154 p-2 border validator input border-gray-300 rounded text-gray-950"
                   required
                   minLength={10}
                   pattern="[a-zA-Z\s]+"
@@ -136,7 +136,7 @@ const Register = () => {
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-90 lg:w-154 p-2 border input validator bg-base-content border-gray-300 rounded text-gray-950"
+                  className="w-90 lg:w-154 p-2 border input validator border-gray-300 rounded text-gray-950"
                   required
                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                 />
@@ -156,7 +156,7 @@ const Register = () => {
                   id="phone"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-90 lg:w-154 p-2 border input bg-base-content border-gray-300 rounded text-gray-950 validator"
+                  className="w-90 lg:w-154 p-2 border input border-gray-300 rounded text-gray-950 validator"
                   required
                   pattern="[0-9]*"
                   minLength={11}
@@ -175,7 +175,7 @@ const Register = () => {
                   id="direction"
                   value={direction}
                   onChange={(e) => setDirection(e.target.value)}
-                  className="w-90 lg:w-154 p-2 border input validator bg-base-content border-gray-300 rounded text-gray-950"
+                  className="w-90 lg:w-154 p-2 border input validator border-gray-300 rounded text-gray-950"
                   minLength={10}
                   required
                 />
@@ -194,7 +194,7 @@ const Register = () => {
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-90 lg:w-154 p-2 border input validator bg-base-content border-gray-300 rounded text-gray-950"
+                  className="w-90 lg:w-154 p-2 border input validator border-gray-300 rounded text-gray-950"
                   required
                   minLength={8}
                 />
@@ -216,7 +216,7 @@ const Register = () => {
                   id="confirmPassword"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-90 lg:w-154 p-2 border bg-base-content input validator border-gray-300 rounded text-gray-950"
+                  className="w-90 lg:w-154 p-2 border input validator border-gray-300 rounded text-gray-950"
                   required
                 />
                 <p className="validator-hint" id="passwordError">
