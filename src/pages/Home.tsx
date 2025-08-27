@@ -9,7 +9,7 @@ return (
 
 <div className=" min-h-screen imgconstructor pb-10">
   <div className=" flex flex-col items-center justify-center min-h-screen ">
-    <div className="bg-green-700 flex items-center justify-center p-6 rounded-full w-72 text-white mt-24 shadow-xl text-3xl font-bold tracking-wide text-center">
+    <div className="bg-blue-700 flex items-center justify-center p-6 rounded-full w-72 text-white mt-24 shadow-xl text-3xl font-bold tracking-wide text-center">
       ¡Bienvenido a ServiPro!
     </div>
     <section className="mt-10 rounded-xl shadow-lg p-8 w-full max-w-xl bg-gray-50 bg-opacity-25 text-gray-800 text-lg">
@@ -24,7 +24,7 @@ return (
         <li>Soporte y asesoría continua</li>
       </ul>
       <div className="mt-6 text-center">
-        <NavLink to={"/services"} className="btn bg-green-700 text-white px-6 py-2 rounded-full shadow hover:bg-green-700 transition">
+        <NavLink to={"/services"} className="btn bg-blue-700 text-white px-6 py-2 rounded-full shadow hover:bg-blue-700 transition">
           Ver todos los servicios
         </NavLink>
       </div>

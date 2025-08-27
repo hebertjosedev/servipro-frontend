@@ -1,8 +1,8 @@
 import { useState } from "react";
-import "../App.css";
+import "../../App.css";
 import { NavLink, useNavigate } from 'react-router';
 import axios from 'axios';
-import { useAuth } from "../services/AuthContext";
+import { useAuth } from "../../services/AuthContext";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -100,7 +100,7 @@ const Login = () => {
             <button
               type="submit"
               // onClick={fetchProtectedData}
-              className="w-full bg-green-700 text-white py-2 rounded hover:bg-green-800 transition"
+              className="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800 transition"
             >
               Iniciar Sesión
             </button>
@@ -113,8 +113,8 @@ const Login = () => {
       ): (    
           <div>
           <h2>Bienvenido!</h2>
-          <button className="w-full bg-green-700 text-white py-2 rounded hover:bg-green-800 transition" onClick={fetchProtectedData}>Obtener datos protegidos</button>
-          <button className="w-full bg-green-700 text-white py-2 rounded hover:bg-green-800 transition" onClick={() => { localStorage.removeItem('token'); setToken(null); setMessage(''); }}>Logout</button>
+          <button className="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800 transition" onClick={fetchProtectedData}>Obtener datos protegidos</button>
+          <button className="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800 transition" onClick={() => { localStorage.removeItem('token'); setToken(null); setMessage(''); }}>Logout</button>
         </div>
 
       )}

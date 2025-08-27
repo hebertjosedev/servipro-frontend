@@ -4,12 +4,12 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import "./App.css";
 
 // Páginas
-import Login from "./pages/Login";
+import Login from "./pages/Login/Login";
 import Home from "./pages/Home";
 import Overlay from "./Overlay/Overlay";
-import Register from "./pages/Register";
+import Register from "./pages/Login/Register";
 import Services from "./pages/Services";
-import Contactus from "./pages/Contactus"
+import Contactus from "./pages/Contactus";
 import Electrician from "./pages/Electrician";
 import Cleaning from "./pages/Cleaning";
 import Technology from "./pages/Technology";
@@ -19,6 +19,7 @@ import Plumbing from "./pages/Plumbing";
 
 // Servicios
 import { AuthProvider } from "./services/AuthContext";
+import Profile from "./pages/Profile/profile";
 
 function App() {
   const router = createBrowserRouter([
@@ -39,36 +40,40 @@ function App() {
           element: <Register />,
         },
         {
+          path: "profile",
+          element: <Profile />,
+        },
+        {
           path: "services",
           element: <Services />,
         },
         {
-          path:"contactus",
-          element: <Contactus/>
+          path: "contactus",
+          element: <Contactus />,
         },
         {
-          path:"electrician",
-          element:<Electrician/>
+          path: "electrician",
+          element: <Electrician />,
         },
         {
-          path:"cleaning",
-          element:<Cleaning/>
+          path: "cleaning",
+          element: <Cleaning />,
         },
         {
-          path:"technology",
-          element:<Technology/>
+          path: "technology",
+          element: <Technology />,
         },
         {
-          path:"electronic",
-          element:<Electronic/>
+          path: "electronic",
+          element: <Electronic />,
         },
         {
-          path:"carpentry",
-          element:<Carpentry/>
+          path: "carpentry",
+          element: <Carpentry />,
         },
         {
-          path:"plumbing",
-          element:<Plumbing/>
+          path: "plumbing",
+          element: <Plumbing />,
         },
       ],
     },
