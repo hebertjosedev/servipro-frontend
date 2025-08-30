@@ -3,8 +3,11 @@ import { IoCall, IoExit, IoHome, IoKey, IoPencilSharp } from "react-icons/io5";
 import ModalDireccion from "./ModalDireccion";
 import ModalTelefono from "./ModalTelefono";
 import ModalPassword from "./ModalPassword";
+import { useAuth } from "../../services/AuthContext";
 
 const Profile = () => {
+  const { user } = useAuth();
+  const [name, Setname] = useState(user?.full_name || "");
   const [telefono, setTelefono] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -105,7 +108,7 @@ const Profile = () => {
         />
       )}
 
-      <div className="flex flex-col gap-3 items-center justify-center border-4 border-purple-500 p-8">
+      <div className="flex flex-col gap-3 items-center justify-center p-8">
         {/* <div className="mx-auto max-w-md overflow-hidden rounded-xl bg-white shadow-md md:max-w-2xl border-4 border-purple-500"> */}
         <div className="flex flex-col items-center p-6 min-w-100 mx-auto max-w-md overflow-hidden rounded-xl bg-white shadow-md md:max-w-2xl">
           <div className="avatar">
@@ -114,7 +117,7 @@ const Profile = () => {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <h2 className="font-bold">Nombre - Apellido</h2>
+            <h2 className="font-bold">{name}</h2>
             <span className="font-medium text-gray-600">
               Nivel: <span className="text-yellow-500">Oro</span>
             </span>
@@ -142,7 +145,6 @@ const Profile = () => {
             <div
               className="flex items-center w-full pb-2 pt-2 cursor-pointer hover:bg-gray-100 transition rounded"
               onClick={() => {
-                console.log("Guardando dirección:", direccion);
                 setActiveModal("direccion");
               }}
             >
@@ -160,7 +162,6 @@ const Profile = () => {
             <div
               className="flex items-center w-full pb-2 pt-2 cursor-pointer hover:bg-gray-100 transition rounded"
               onClick={() => {
-                console.log("Guardando telefono:", telefono);
                 setActiveModal("telefono");
               }}
             >
@@ -187,7 +188,6 @@ const Profile = () => {
             <div
               className="flex items-center w-full pb-2 pt-2 cursor-pointer hover:bg-gray-100 transition rounded"
               onClick={() => {
-                console.log("Cambiando contraseña:", newPassword);
                 setActiveModal("password");
               }}
             >
@@ -202,7 +202,7 @@ const Profile = () => {
             </div>
           </div>
           <div className="border-b-1 border-gray-200 border-t-0 border-l-0 border-r-0 w-full">
-            <div className="flex items-center w-full pb-2 pt-2">
+            <div className="flex items-center w-full pb-2 pt-2 cursor-pointer hover:bg-gray-100 transition rounded">
               <div className="pr-2">
                 <span className="">
                   <IoExit />

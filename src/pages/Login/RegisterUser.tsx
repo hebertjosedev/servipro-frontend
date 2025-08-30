@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import { Navigate, useNavigate } from "react-router";
 
 const RegisterUser = () => {
 
@@ -17,6 +18,7 @@ const RegisterUser = () => {
       const [confirmPassword, setConfirmPassword] = useState("");
       const [isLoading, setIsLoading] = useState(false); // Estado para el botón de carga
       const [generalError, setGeneralError] = useState(""); // Para errores generales de la API
+      const navigate = useNavigate();
 
         useEffect(() => {
           const passwordError = document.getElementById("passwordError");
@@ -70,7 +72,7 @@ const RegisterUser = () => {
             // Axios lanza un error para códigos de estado 4xx/5xx, no es necesario verificar response.ok
             // Si llegamos aquí, la solicitud fue exitosa (código 2xx)
             alert("Registro exitoso. ¡Ahora puedes iniciar sesión!");
-            navigate("/"); // Redirige a la página de inicio de sesión
+            navigate("/login"); // Redirige a la página de inicio de sesión
           } catch (error) {
             console.error("Error durante el registro:", error);
             if (axios.isAxiosError(error) && error.response) {
@@ -138,7 +140,8 @@ const RegisterUser = () => {
                     onChange={(e) => setDocumento(e.target.value)}
                     className="w-80 lg:w-84 p-2 border input validator border-gray-300 rounded text-gray-950"
                     required
-                    minLength={6}
+                    minLength={7}
+                    maxLength={8}
                     pattern="[0-9]*"
                   />
                   {documento && documento.length < 6 && (

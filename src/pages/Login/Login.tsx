@@ -100,7 +100,7 @@ const Login = () => {
             <button
               type="submit"
               // onClick={fetchProtectedData}
-              className="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800 transition"
+              className="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800 transition cursor-pointer"
             >
               Iniciar Sesión
             </button>

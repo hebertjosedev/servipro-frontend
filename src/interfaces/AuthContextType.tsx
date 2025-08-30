@@ -1,7 +1,19 @@
-import { type User } from './User'; // Importa el tipo User
+// src/interfaces/AuthContextType.ts
+export interface User {
+  id: number;
+  full_name: string;
+  email: string;
+  phone: string;
+  address: string;
+  document_type: string;
+  document_number: string;
+}
 
-export type AuthContextType = {
+export interface AuthContextType {
   user: User | null;
-  login: (userData: User) => void;
+  token: string | null;
+  login: (token: string) => void;
   logout: () => void;
-};
+  loading: boolean;
+  setUser: (user: User | null) => void;
+}

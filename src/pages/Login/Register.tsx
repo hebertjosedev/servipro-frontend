@@ -1,103 +1,13 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useState } from "react";
 import "../../App.css";
 // import Pikaday from "pikaday";
-import { useNavigate } from "react-router";
-import axios from "axios";
 import RegisterProfessional from "./RegisterProfessional";
 import RegisterUser from "./RegisterUser";
-import { IoPerson } from "react-icons/io5";
 
 const Register = () => {
   // Info usuarios y profesionales
   const [user, setUser] = useState(false);
   const [professional, setProfessional] = useState(false);
-  // const [name, setName] = React.useState("");
-  // const [documentType, setDocumentType] = React.useState("V");
-  // const [documento, setDocumento] = React.useState("");
-  // // const [birthdate, setBirthdate] = React.useState("");
-  // const myDatepicker = useRef(null);
-  // const [phone, setPhone] = React.useState("");
-  // const [direction, setDirection] = React.useState("");
-  // const [email, setEmail] = React.useState("");
-  // const [password, setPassword] = React.useState("");
-  // const [confirmPassword, setConfirmPassword] = React.useState("");
-  // const [isLoading, setIsLoading] = React.useState(false); // Estado para el botón de carga
-  // const [generalError, setGeneralError] = React.useState(""); // Para errores generales de la API
-
-  const navigate = useNavigate();
-
-  // Validar que password y confirmPassword sean iguales
-  // useEffect(() => {
-  //   const passwordError = document.getElementById("passwordError");
-  //   if (confirmPassword !== password) {
-  //     if (passwordError) {
-  //       passwordError.style.display = "block";
-  //       passwordError.style.visibility = "visible";
-  //       passwordError.style.color = "var(--color-error)";
-  //     }
-  //   } else {
-  //     if (passwordError) {
-  //       passwordError.style.display = "none";
-  //       passwordError.style.visibility = "hidden";
-  //     }
-  //   }
-  // }, [password, confirmPassword]);
-
-  // const handleRegister = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   // const userData = new URLSearchParams({
-  //   //   document_type: documento, // Asegúrate de que los nombres de las claves coincidan
-  //   //   full_name: name,
-  //   //   email: email,
-  //   //   phone: phone,
-  //   //   address: direction,
-  //   //   // birth_date: birthDate,
-  //   //   password: password,
-  //   // });
-
-  //   // Realiza la solicitud POST con Axios
-  //   try {
-  //     const response = await axios.post(
-  //       `http://localhost:8000/api/v1/users/register`,
-  //       {
-  //         full_name: name,
-  //         document_type: documentType,
-  //         document_number: documento, // Asegúrate de que los nombres de las claves coincidan
-  //         phone: phone,
-  //         address: direction,
-  //         email: email,
-  //         password: password,
-  //         // birth_date: birthDate,
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-
-  //     // Axios lanza un error para códigos de estado 4xx/5xx, no es necesario verificar response.ok
-  //     // Si llegamos aquí, la solicitud fue exitosa (código 2xx)
-  //     alert("Registro exitoso. ¡Ahora puedes iniciar sesión!");
-  //     navigate("/"); // Redirige a la página de inicio de sesión
-  //   } catch (error) {
-  //     console.error("Error durante el registro:", error);
-  //     if (axios.isAxiosError(error) && error.response) {
-  //       // Error de la API (por ejemplo, validación, usuario ya existe)
-  //       setGeneralError(
-  //         error.response.data.detail ||
-  //           "Error en el registro. Inténtalo de nuevo."
-  //       );
-  //     } else {
-  //       // Otros errores (por ejemplo, problemas de red)
-  //       setGeneralError(
-  //         "Hubo un problema de conexión con el servidor. Inténtalo más tarde."
-  //       );
-  //     }
-  //   } finally {
-  //     setIsLoading(false); // Desactiva el estado de carga
-  //   }
-  // };
 
   return (
     <>

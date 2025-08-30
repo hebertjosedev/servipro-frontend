@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 
 const RegisterProfessional = () => {
 
@@ -17,6 +18,7 @@ const RegisterProfessional = () => {
       const [confirmPassword, setConfirmPassword] = useState("");
       const [isLoading, setIsLoading] = useState(false); // Estado para el botón de carga
       const [generalError, setGeneralError] = useState(""); // Para errores generales de la API
+      const navigate = useNavigate();
 
         useEffect(() => {
           const passwordError = document.getElementById("passwordError");
@@ -70,7 +72,7 @@ const RegisterProfessional = () => {
       // Axios lanza un error para códigos de estado 4xx/5xx, no es necesario verificar response.ok
       // Si llegamos aquí, la solicitud fue exitosa (código 2xx)
       alert("Registro exitoso. ¡Ahora puedes iniciar sesión!");
-      navigate("/"); // Redirige a la página de inicio de sesión
+      navigate("/login"); // Redirige a la página de inicio de sesión
     } catch (error) {
       console.error("Error durante el registro:", error);
       if (axios.isAxiosError(error) && error.response) {
