@@ -84,11 +84,20 @@ const Overlay = () => {
                 Perfil
               </NavLink>
             </li>
-            <li>
-              <NavLink to={"/services"} className="text-2xl">
-                Servicios
-              </NavLink>
-            </li>
+            {user?.role === "user" && (
+              <li>
+                <NavLink to={"/services"} className="text-2xl">
+                  Solicitar servicio
+                </NavLink>
+              </li>
+            )}
+            {user?.role === "professional" && (
+              <li>
+                <NavLink to={"/services"} className="text-2xl">
+                  Servicios solicitados
+                </NavLink>
+              </li>
+            )}
             <li>
               <NavLink to={"/contactus"} className="text-2xl">
                 Contáctanos

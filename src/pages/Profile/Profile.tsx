@@ -6,8 +6,8 @@ import ModalPassword from "./ModalPassword";
 import { useAuth } from "../../services/AuthContext";
 
 const Profile = () => {
-  const { user } = useAuth();
-  const [name, Setname] = useState(user?.full_name || "");
+  const { user, logout } = useAuth();
+  const [name, setName] = useState(user?.full_name || "");
   const [telefono, setTelefono] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -36,32 +36,55 @@ const Profile = () => {
     setActiveModal(null);
   };
 
-  const handleSavePassword = () => {
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      alert("Completa todos los campos.");
-      return;
+const handleSavePassword = async () => {
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    alert("Completa todos los campos.");
+    return;
+  }
+
+  if (newPassword.length < 6) {
+    alert("La nueva contraseña debe tener al menos 6 caracteres.");
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    alert("Las contraseñas no coinciden.");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/change-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // Si usas autenticación con JWT, incluye el token aquí:
+        // Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        current_password: currentPassword,
+        new_password: newPassword,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Contraseña actualizada con éxito.");
+      setActiveModal(null);
+    } else {
+      alert(data.detail || "Error al cambiar la contraseña.");
     }
+  } catch (error) {
+    console.error("Error al cambiar la contraseña:", error);
+    alert("Hubo un problema al conectar con el servidor.");
+  }
 
-    if (newPassword.length < 6) {
-      alert("La nueva contraseña debe tener al menos 6 caracteres.");
-      return;
-    }
+  // Limpieza de campos
+  setCurrentPassword("");
+  setNewPassword("");
+  setConfirmPassword("");
+};
 
-    if (newPassword !== confirmPassword) {
-      alert("Las contraseñas no coinciden.");
-      return;
-    }
-
-    // Aquí podrías validar la contraseña actual con tu backend
-    console.log("Contraseña actual:", currentPassword);
-    console.log("Nueva contraseña:", newPassword);
-
-    // Limpieza y cierre
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    setActiveModal(null);
-  };
 
   useEffect(() => {
     if (!activeModal) {
@@ -202,7 +225,13 @@ const Profile = () => {
             </div>
           </div>
           <div className="border-b-1 border-gray-200 border-t-0 border-l-0 border-r-0 w-full">
-            <div className="flex items-center w-full pb-2 pt-2 cursor-pointer hover:bg-gray-100 transition rounded">
+            <div 
+            className="flex items-center w-full pb-2 pt-2 cursor-pointer hover:bg-gray-100 transition rounded"
+            onClick={() => {
+                logout()
+                setName("")
+              }}
+            >
               <div className="pr-2">
                 <span className="">
                   <IoExit />

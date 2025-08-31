@@ -7,6 +7,7 @@ export interface User {
   address: string;
   document_type: string;
   document_number: string;
+  role: "user" | "professional";
 }
 
 export interface AuthContextType {
