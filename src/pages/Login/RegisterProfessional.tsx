@@ -47,7 +47,16 @@ const RegisterProfessional = () => {
 
     const skillsArray = skills.split(",").map((s) => s.trim());
 
+      console.log("Categoría seleccionada:", professionalCategory);
+      console.log("Payload:", {
+        category_id: Number(professionalCategory),
+      });
+
     try {
+      console.log("Categoría seleccionada:", professionalCategory);
+      console.log("Payload:", {
+        category_id: Number(professionalCategory),
+      });
       const response = await axios.post(
         `http://localhost:8000/api/v1/professionals/register`,
         {
@@ -63,7 +72,7 @@ const RegisterProfessional = () => {
           bio: bio,
           skills: skillsArray,
           service_area: serviceArea,
-          category_id: categoryId,
+          category_id: Number(professionalCategory),
         },
         {
           headers: {
@@ -96,8 +105,8 @@ const RegisterProfessional = () => {
           Registro de profesion
         </h2>
         <div className="mb-2 w-90 lg:w-100">
-          <label className="block text-gray-950 mb-2" htmlFor="id">
-            Profesion u oficio
+          <label htmlFor="categoryId" className="block text-gray-950 mb-2">
+            Profesión u oficio
           </label>
           <select
             name="categoryId"

@@ -1,76 +1,77 @@
+import axios from "axios";
 import "../App.css";
-import { NavLink } from 'react-router';
+import { ProfessionalCard } from "./ProfessionalCard";
+import { useState } from "react";
+import type { Professional } from "../interfaces/Professional";
 
-const Services = () => {
+const Electronic = () => {
+  const [professionals, setProfessionals] = useState<Professional[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+
+  const categories = [
+    { id: 1, name: "Electricidad" },
+    { id: 2, name: "Tecnología" },
+    { id: 3, name: "Plomería" },
+    { id: 4, name: "Limpieza" },
+    { id: 5, name: "Electrónica" },
+    { id: 6, name: "Carpintería" },
+  ];
+
+  const fetchProfessionalsByCategory = async (
+    categoryId: number,
+    categoryName: string
+  ) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/api/v1/professionals/category/${categoryId}`
+      );
+      setProfessionals(res.data);
+      setSelectedCategory(categoryName);
+    } catch (err) {
+      console.error("Error al cargar profesionales por categoría", err);
+    }
+  };
   return (
     <>
       <div className="imgconstructor min-h-screen flex items-center justify-center">
         <div className="flex card flex-col container sm:w-100 md:w-120 lg:w-140 gap-3">
           <div className="card-body bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
-            <h2 className="card-title text-2xl text-gray-800 mb-6 text-center">
-              Servicios
-            </h2>
-            <div className="flex flex-row flex-wrap gap-8 justify-center p-8 w-full">
-              <div className="flex flex-col items-center px-3 w-30">
-                <NavLink to={"/electrician"} className={"hover:bg-gray-700  transition rounded-2xl"} >
-                <img
-                  src="src/assets/electrician._icon.png"
-                  className="w-24 h-24"
-                  alt="electrician_icon"
-                />
-                </NavLink>
-                <p className="text-2xl text-gray-800 mt-2">Electricidad</p>
+            <div className="p-6">
+              <h1 className="text-3xl font-bold text-center mb-6">
+                Solicitar Servicios
+              </h1>
+
+              <div className="flex flex-wrap gap-4 justify-center mb-6">
+                {categories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() =>
+                      fetchProfessionalsByCategory(cat.id, cat.name)
+                    }
+                    className="btn btn-outline btn-primary"
+                  >
+                    {cat.name}
+                  </button>
+                ))}
               </div>
-              <div className="flex flex-col items-center px-3 w-30 ">
-                <NavLink to={"/technology"} className={"hover:bg-gray-700  transition rounded-2xl"} >
-                <img
-                  src="src/assets/it_icon.png"
-                  className="w-24 h-24"
-                  alt="it_icon"
-                />
-                </NavLink>
-                <p className="text-2xl text-gray-800 mt-2">Tecnología</p>
+
+              {selectedCategory && (
+                <h2 className="text-xl font-semibold text-center mb-4">
+                  Profesionales en {selectedCategory}
+                </h2>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {professionals.map((pro) => (
+                  <ProfessionalCard key={pro.id} professional={pro} />
+                ))}
               </div>
-              <div className="flex flex-col items-center px-3 w-30">
-                <NavLink to={"/plumbing"} className={"hover:bg-gray-700  transition rounded-2xl"} >
-                <img
-                  src="src/assets/plumbing_icon.png"
-                  className="w-24 h-24"
-                  alt="plumbing_icon"
-                />
-                </NavLink>
-                <p className="text-2xl text-gray-800 mt-2">Plomería</p>
-              </div>
-                 <div className="flex flex-col items-center px-3 w-30">
-                <NavLink to={"/cleaning"} className={"hover:bg-gray-700  transition rounded-2xl"} >
-                <img
-                  src="src\assets\cleaning_icon.png"
-                  className="w-24 h-24"
-                  alt="cleaning_icon"
-                />
-                </NavLink>
-                <p className="text-2xl text-gray-800 mt-2">Limpieza</p>
-              </div>
-               <div className="flex flex-col items-center px-3 w-30">
-                <NavLink to={"/electronic"} className={"hover:bg-gray-700  transition rounded-2xl"} >
-                <img
-                  src="src/assets/electronic_icon.png"
-                  className="w-24 h-24"
-                  alt="electronic_icon"
-                />
-                </NavLink>
-                <p className="text-2xl text-gray-800 mt-2">Electrónica</p>
-              </div>
-              <div className="flex flex-col items-center px-3 w-30">
-                <NavLink to={"/carpentry"} className={"hover:bg-gray-700  transition rounded-2xl"} >
-                <img
-                  src="src/assets/Carpentry_icon.png"
-                  className="w-24 h-24"
-                  alt="carpentry_icon"
-                />
-                </NavLink>
-                <p className="text-2xl text-gray-800 mt-2">Carpintería</p>
-              </div>
+
+              {selectedCategory && professionals.length === 0 && (
+                <p className="text-center text-gray-500 italic mt-6">
+                  No hay profesionales registrados en esta categoría aún.
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -78,5 +79,4 @@ const Services = () => {
     </>
   );
 };
-
-export default Services;
+export default Electronic;
