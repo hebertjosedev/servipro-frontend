@@ -93,7 +93,7 @@ const Overlay = () => {
             )}
             {user?.role === "professional" && (
               <li>
-                <NavLink to={"/services"} className="text-2xl">
+                <NavLink to={"/requested-services"} className="text-2xl">
                   Servicios solicitados
                 </NavLink>
               </li>

@@ -20,6 +20,7 @@ import Plumbing from "./pages/Plumbing";
 // Servicios
 import { AuthProvider } from "./services/AuthContext";
 import Profile from "./pages/Profile/profile";
+import RequestedServices from "./pages/RequestedServices";
 
 function App() {
   const router = createBrowserRouter([
@@ -46,6 +47,10 @@ function App() {
         {
           path: "services",
           element: <Services />,
+        },
+        {
+          path: "requested-services",
+          element: <RequestedServices />,
         },
         {
           path: "contactus",
