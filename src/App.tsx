@@ -19,8 +19,9 @@ import Plumbing from "./pages/Plumbing";
 
 // Servicios
 import { AuthProvider } from "./services/AuthContext";
-import Profile from "./pages/Profile/profile";
+import Profile from "./pages/Profile/Profile";
 import RequestedServices from "./pages/RequestedServices";
+import { ProfessionalAuthProvider } from "./services/ProfessionalAuthContext";
 
 function App() {
   const router = createBrowserRouter([
@@ -87,7 +88,9 @@ function App() {
   return (
     <>
       <AuthProvider>
+        <ProfessionalAuthProvider>
         <RouterProvider router={router} />
+        </ProfessionalAuthProvider>
       </AuthProvider>
     </>
   );

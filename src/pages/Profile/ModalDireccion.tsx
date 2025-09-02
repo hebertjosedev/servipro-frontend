@@ -1,16 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../services/AuthContext";
+import { useProfessionalAuth } from "../../services/ProfessionalAuthContext";
 import ModalBase from "./ModalBase";
 import axios from "axios";
 
 const ModalDireccion = ({ onClose }) => {
-  const { user, token, setUser } = useAuth();
-  const [direccion, setDireccion] = useState(user?.address || "");
+  const { user, token: userToken, setUser } = useAuth();
+  const { professional, token: professionalToken, setProfessional } = useProfessionalAuth();
+
+  console.log("Usuario:", user);
+  console.log("Profesional:", professional);
+
+
+  const isProfessional = professional?.role === "professional";
+  const token = userToken || professionalToken;
+
+  const [direccion, setDireccion] = useState("");
+
+  // 🔄 Sincroniza la dirección al abrir el modal
+  useEffect(() => {
+    const direccionActual = isProfessional
+      ? professional?.address || ""
+      : user?.address || "";
+    setDireccion(direccionActual);
+  }, [user, professional]);
 
   const handleSave = async () => {
     try {
+      const endpoint = isProfessional
+        ? "http://localhost:8000/api/v1/professionals/update-contact"
+        : "http://localhost:8000/api/v1/users/update-contact";
+
       const res = await axios.put(
-        "http://localhost:8000/api/v1/users/update-address",
+        endpoint,
         { address: direccion },
         {
           headers: {
@@ -18,8 +40,15 @@ const ModalDireccion = ({ onClose }) => {
           },
         }
       );
-      setUser(res.data); // actualiza el contexto
-      onClose(); // cierra el modal
+
+      if (isProfessional) {
+        setProfessional(res.data);
+      } else {
+        setUser(res.data);
+      }
+
+      setDireccion(res.data.address || "");
+      onClose();
     } catch (err) {
       console.error("Error al actualizar dirección:", err);
     }
@@ -35,7 +64,15 @@ const ModalDireccion = ({ onClose }) => {
         >
           &times;
         </button>
-        <h2 className="text-xl font-semibold mb-4">Editar Dirección</h2>
+        <h2 className="text-xl font-semibold mb-2">Editar Dirección</h2>
+
+        {/* Dirección actual */}
+        {direccion && (
+          <p className="text-sm text-gray-600 mb-2">
+            Dirección actual: <span className="font-medium">{direccion}</span>
+          </p>
+        )}
+
         <input
           type="text"
           value={direccion}
