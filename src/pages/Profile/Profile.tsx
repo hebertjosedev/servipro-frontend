@@ -4,16 +4,31 @@ import ModalDireccion from "./ModalDireccion";
 import ModalTelefono from "./ModalTelefono";
 import ModalPassword from "./ModalPassword";
 import { useAuth } from "../../services/AuthContext";
+import { useProfessionalAuth } from "../../services/ProfessionalAuthContext";
 
 const Profile = () => {
-  const { user, logout } = useAuth();
-  const [name, setName] = useState(user?.full_name || "");
-  const [telefono, setTelefono] = useState("");
+  // const { user, logout } = useAuth();
+const { user, logout } = useAuth();
+const { professional } = useProfessionalAuth();
+const isProfessional = !!professional;
+
+const [name, setName] = useState(
+  isProfessional ? professional?.full_name || "" : user?.full_name || ""
+);
+const [direccion, setDireccion] = useState(
+  isProfessional ? professional?.address || "" : user?.address || ""
+);
+const [telefono, setTelefono] = useState(
+  isProfessional ? professional?.phone || "" : user?.phone || ""
+);
+
+  // const [name, setName] = useState(user?.full_name || "");
+  // const [telefono, setTelefono] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [activeModal, setActiveModal] = useState<string | null>(null);
-  const [direccion, setDireccion] = useState("Av. fuerzas armadas");
+  // const [direccion, setDireccion] = useState("Av. fuerzas armadas");
 
   const handleSaveDireccion = async () => {
     await fetch("/api/update-direccion", {
@@ -36,65 +51,80 @@ const Profile = () => {
     setActiveModal(null);
   };
 
-const handleSavePassword = async () => {
-  if (!currentPassword || !newPassword || !confirmPassword) {
-    alert("Completa todos los campos.");
-    return;
-  }
-
-  if (newPassword.length < 6) {
-    alert("La nueva contraseña debe tener al menos 6 caracteres.");
-    return;
-  }
-
-  if (newPassword !== confirmPassword) {
-    alert("Las contraseñas no coinciden.");
-    return;
-  }
-
-  try {
-    const res = await fetch("/api/change-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // Si usas autenticación con JWT, incluye el token aquí:
-        // Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        current_password: currentPassword,
-        new_password: newPassword,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      alert("Contraseña actualizada con éxito.");
-      setActiveModal(null);
-    } else {
-      alert(data.detail || "Error al cambiar la contraseña.");
+  const handleSavePassword = async () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      alert("Completa todos los campos.");
+      return;
     }
-  } catch (error) {
-    console.error("Error al cambiar la contraseña:", error);
-    alert("Hubo un problema al conectar con el servidor.");
-  }
 
-  // Limpieza de campos
-  setCurrentPassword("");
-  setNewPassword("");
-  setConfirmPassword("");
-};
+    if (newPassword.length < 6) {
+      alert("La nueva contraseña debe tener al menos 6 caracteres.");
+      return;
+    }
 
+    if (newPassword !== confirmPassword) {
+      alert("Las contraseñas no coinciden.");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Si usas autenticación con JWT, incluye el token aquí:
+          // Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          current_password: currentPassword,
+          new_password: newPassword,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Contraseña actualizada con éxito.");
+        setActiveModal(null);
+      } else {
+        alert(data.detail || "Error al cambiar la contraseña.");
+      }
+    } catch (error) {
+      console.error("Error al cambiar la contraseña:", error);
+      alert("Hubo un problema al conectar con el servidor.");
+    }
+
+    // Limpieza de campos
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+  };
 
   useEffect(() => {
-    if (!activeModal) {
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
-      setTelefono("");
-      setDireccion("");
-    }
-  }, [activeModal]);
+  if (activeModal === "direccion") {
+    const nuevaDireccion = isProfessional
+      ? professional?.address || ""
+      : user?.address || "";
+    setDireccion(nuevaDireccion);
+  }
+
+  if (activeModal === "telefono") {
+    const nuevoTelefono = isProfessional
+      ? professional?.phone || ""
+      : user?.phone || "";
+    setTelefono(nuevoTelefono);
+  }
+}, [activeModal, user, professional]);
+
+  // useEffect(() => {
+  //   if (!activeModal) {
+  //     setCurrentPassword("");
+  //     setNewPassword("");
+  //     setConfirmPassword("");
+  //     setTelefono("");
+  //     setDireccion("");
+  //   }
+  // }, [activeModal]);
 
   return (
     <>
@@ -225,11 +255,11 @@ const handleSavePassword = async () => {
             </div>
           </div>
           <div className="border-b-1 border-gray-200 border-t-0 border-l-0 border-r-0 w-full">
-            <div 
-            className="flex items-center w-full pb-2 pt-2 cursor-pointer hover:bg-gray-100 transition rounded"
-            onClick={() => {
-                logout()
-                setName("")
+            <div
+              className="flex items-center w-full pb-2 pt-2 cursor-pointer hover:bg-gray-100 transition rounded"
+              onClick={() => {
+                logout();
+                setName("");
               }}
             >
               <div className="pr-2">

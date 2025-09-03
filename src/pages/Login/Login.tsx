@@ -3,6 +3,7 @@ import "../../App.css";
 import { NavLink, useNavigate } from 'react-router';
 import axios from 'axios';
 import { useAuth } from "../../services/AuthContext";
+import { useProfessionalAuth } from "../../services/ProfessionalAuthContext";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -12,35 +13,44 @@ const Login = () => {
   // const [token, setToken] = useState(localStorage.getItem('token') || null);
 
   const {login, token } = useAuth()
+  const { setProfessional } = useProfessionalAuth();
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:8000/api/v1/auth/token',
-        new URLSearchParams({
-          username: username,
-          password: password,
-        }),{
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }
-      );
-      const { access_token } = response.data;
-      login(access_token)
-      setMessage('Inicio de sesion exitoso!!');
+  e.preventDefault();
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/api/v1/auth/token",
+      new URLSearchParams({
+        username: username,
+        password: password,
+      }),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
 
-      // redirigimos al usuario a la pagina de inicio o a donde queramos
-      navigate("/")
+    const { access_token, role, user, professional } = response.data;
+    login(access_token); // guarda el token en contexto común
 
-      // localStorage.setItem('token', access_token);
-      // setToken(access_token)
-      // setMessage('Inicio de sesion exitoso!!');
-    } catch (error) {
-      setMessage('Error de inicio de sesion. :(');
-      console.error(error);
+    if (role === "user") {
+      setUser(user);
+      localStorage.setItem("userData", JSON.stringify(user));
+      localStorage.setItem("userToken", access_token);
+    } else if (role === "professional") {
+      setProfessional(professional);
+      localStorage.setItem("professionalData", JSON.stringify(professional));
+      localStorage.setItem("professionalToken", access_token);
     }
-  };
+
+    setMessage("Inicio de sesión exitoso!!");
+    navigate("/");
+  } catch (error) {
+    setMessage("Error de inicio de sesión. :(");
+    console.error(error);
+  }
+};
 
   // esta funcion es para poder acceder a alguna pagina que necesite autenticacion
   const fetchProtectedData = async () => {
