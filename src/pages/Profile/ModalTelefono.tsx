@@ -3,7 +3,14 @@ import { useAuth } from "../../services/AuthContext";
 import ModalBase from "./ModalBase";
 import axios from "axios";
 
-const ModalTelefono = ({ onClose }) => {
+interface ModalTelefonoProps {
+  value: string;
+  onChange: (e: any) => void;
+  onSave: () => void;
+  onClose: () => void;
+}
+
+const ModalTelefono = ({ onClose }: ModalTelefonoProps) => {
   const { user, token, setUser } = useAuth();
   const [telefono, setTelefono] = useState(user?.phone || "");
 

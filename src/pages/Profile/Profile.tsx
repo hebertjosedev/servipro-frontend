@@ -5,6 +5,8 @@ import ModalTelefono from "./ModalTelefono";
 import ModalPassword from "./ModalPassword";
 import { useAuth } from "../../services/AuthContext";
 import { useProfessionalAuth } from "../../services/ProfessionalAuthContext";
+import axios from "axios";
+import type { ModalDireccionProps } from "./ModalDireccion";
 
 const Profile = () => {
   // const { user, logout } = useAuth();
@@ -161,9 +163,9 @@ const [telefono, setTelefono] = useState(
         />
       )}
 
-      <div className="flex flex-col gap-3 items-center justify-center p-8">
+      <div className="flex flex-col gap-3 items-center justify-center p-8 min-h-screen">
         {/* <div className="mx-auto max-w-md overflow-hidden rounded-xl bg-white shadow-md md:max-w-2xl border-4 border-purple-500"> */}
-        <div className="flex flex-col items-center p-6 min-w-100 mx-auto max-w-md overflow-hidden rounded-xl bg-white shadow-md md:max-w-2xl">
+        <div className="flex flex-col items-center p-6 min-w-100 mx-auto max-w-md overflow-hidden rounded-xl bg-white shadow-xl/30 inset-ring-4 inset-ring-gray-100 md:max-w-2xl">
           <div className="avatar">
             <div className="ring-primary ring-offset-base-100 w-24 rounded-full ring-2 ring-offset-2">
               <img src="https://img.daisyui.com/images/profile/demo/spiderperson@192.webp" />
@@ -181,7 +183,7 @@ const [telefono, setTelefono] = useState(
             ></progress>
           </div>
         </div>
-        <div className="flex flex-col items-center p-6 min-w-100 mx-auto max-w-md overflow-hidden rounded-xl bg-white shadow-md md:max-w-2xl">
+        <div className="flex flex-col items-center p-6 min-w-100 mx-auto max-w-md overflow-hidden rounded-xl bg-white shadow-xl/30 inset-ring-4 inset-ring-gray-100 md:max-w-2xl">
           <div className="border-b-1 border-gray-200 border-t-0 border-l-0 border-r-0 w-full">
             <div className="flex items-center justify-between w-full pb-2">
               <div className="">
@@ -229,7 +231,7 @@ const [telefono, setTelefono] = useState(
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-center p-6 min-w-100 mx-auto max-w-md overflow-hidden rounded-xl bg-white shadow-md md:max-w-2xl">
+        <div className="flex flex-col items-center p-6 min-w-100 mx-auto max-w-md overflow-hidden rounded-xl bg-white shadow-xl/30 inset-ring-4 inset-ring-gray-100 md:max-w-2xl">
           <div className="border-b-1 border-gray-200 border-t-0 border-l-0 border-r-0 w-full">
             <div className="flex items-center justify-between w-full pb-2">
               <div className="">

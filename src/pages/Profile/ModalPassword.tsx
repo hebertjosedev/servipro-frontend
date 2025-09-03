@@ -2,7 +2,16 @@ import { useState } from "react";
 import ModalBase from "./ModalBase";
 import { useAuth } from "../../services/AuthContext";
 
-const ModalPassword = ({ onClose }: { onClose: () => void; token: string }) => {
+export interface ModalPasswordProps {
+  current: string;
+  newPass: string;
+  confirm: string;
+  onChange: (field: string, value: string) => void;
+  onSave: () => Promise<void>;
+  onClose: () => void;
+}
+
+const ModalPassword = ({ onClose }: ModalPasswordProps) => {
   const { token } = useAuth();
   const [current, setCurrent] = useState("");
   const [newPass, setNewPass] = useState("");
