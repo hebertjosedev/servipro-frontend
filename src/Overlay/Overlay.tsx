@@ -100,7 +100,7 @@ const Overlay = () => {
             )}
             <li>
               <NavLink to={"/contactus"} className="text-2xl">
-                Contáctanos
+                Soporte Técnico
               </NavLink>
             </li>
           </ul>
