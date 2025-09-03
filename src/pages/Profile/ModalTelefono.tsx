@@ -1,27 +1,51 @@
 import { useState } from "react";
-import { useAuth } from "../../services/AuthContext";
-import ModalBase from "./ModalBase";
 import axios from "axios";
+import { useAuth } from "../../services/AuthContext";
+import { useProfessionalAuth } from "../../services/ProfessionalAuthContext";
+import ModalBase from "./ModalBase";
 
 const ModalTelefono = ({ onClose }) => {
-  const { user, token, setUser } = useAuth();
-  const [telefono, setTelefono] = useState(user?.phone || "");
+  const { user, token: userToken, setUser } = useAuth();
+  const { professional, token: professionalToken, setProfessional } = useProfessionalAuth();
+
+  const isUser = !!user;
+  const isProfessional = !!professional;
+
+  const [telefono, setTelefono] = useState(
+    user?.phone || professional?.phone || ""
+  );
+
+  const endpoint = isUser
+    ? "http://localhost:8000/api/v1/users/update-contact"
+    : isProfessional
+    ? "http://localhost:8000/api/v1/professionals/update-contact"
+    : null;
+
+  const activeToken = userToken || professionalToken;
 
   const handleSave = async () => {
+    if (!endpoint || !activeToken) return;
+
     try {
       const res = await axios.put(
-        "http://localhost:8000/api/v1/users/update-phone",
+        endpoint,
         { phone: telefono },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${activeToken}`,
           },
         }
       );
-      setUser(res.data); // actualiza el contexto
-      onClose(); // cierra el modal
+
+      if (isUser) {
+        setUser(res.data);
+      } else if (isProfessional) {
+        setProfessional(res.data);
+      }
+
+      onClose();
     } catch (err) {
-      console.error("Error al actualizar dirección:", err);
+      console.error("Error al actualizar teléfono:", err);
     }
   };
 

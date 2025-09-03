@@ -20,6 +20,7 @@ export interface ProfessionalPrivate extends Professional {
 export interface ProfessionalAuthContextType {
   professional: ProfessionalPrivate | null;
   token: string | null;
+  setToken: (token: string | null) => void;
   login: (token: string) => void;
   logout: () => void;
   loading: boolean;

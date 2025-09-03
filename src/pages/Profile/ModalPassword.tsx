@@ -1,14 +1,21 @@
 import { useState } from "react";
 import ModalBase from "./ModalBase";
 import { useAuth } from "../../services/AuthContext";
+import { useProfessionalAuth } from "../../services/ProfessionalAuthContext";
 
-const ModalPassword = ({ onClose }: { onClose: () => void; token: string }) => {
-  const { token } = useAuth();
+const ModalPassword = ({ onClose }: { onClose: () => void }) => {
+  const { token: userToken} = useAuth();
+  const { token: professionalToken } = useProfessionalAuth();
+
+  const activeToken = userToken || professionalToken;
+
+  const endpoint = "http://localhost:8000/api/v1/auth/change-password";
+
+
   const [current, setCurrent] = useState("");
   const [newPass, setNewPass] = useState("");
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
-  
 
   const handleSave = async () => {
     if (!current || !newPass || !confirm) {
@@ -26,14 +33,19 @@ const ModalPassword = ({ onClose }: { onClose: () => void; token: string }) => {
       return;
     }
 
+    if (!endpoint || !activeToken) {
+      alert("No se pudo determinar el tipo de sesión.");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/api/v1/users/change-password", {
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${activeToken}`,
         },
         body: JSON.stringify({
           current_password: current,

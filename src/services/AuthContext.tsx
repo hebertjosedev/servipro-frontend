@@ -24,7 +24,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token") || null
+    localStorage.getItem("userToken") || null
   );
   const [loading, setLoading] = useState(true);
 
@@ -33,17 +33,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (token) {
         try {
           const response = await axios.get(
-            "http://localhost:8000/api/v1/users/me",
+            "http://localhost:8000/api/v1/auth/me",
             {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             }
           );
-          setUser(response.data);
+
+          if (response.data.role === "user") {
+            setUser(response.data);
+          } else {
+            // No es usuario, limpiar contexto
+            localStorage.removeItem("userToken");
+            setToken(null);
+          }
         } catch (error) {
           console.error("Error fetching user data:", error);
-          localStorage.removeItem("token");
+          localStorage.removeItem("userToken");
           setToken(null);
         }
       }
@@ -53,12 +60,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [token]);
 
   const login = (newToken: string) => {
-    localStorage.setItem("token", newToken);
+    localStorage.setItem("userToken", newToken);
     setToken(newToken);
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("userToken");
     setToken(null);
     setUser(null);
   };
@@ -66,6 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const authValue: AuthContextType = {
     user,
     token,
+    setToken,
     login,
     logout,
     loading,
@@ -73,8 +81,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={authValue}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={authValue}>{children}</AuthContext.Provider>
   );
 };

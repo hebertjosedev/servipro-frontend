@@ -5,12 +5,22 @@ import ModalTelefono from "./ModalTelefono";
 import ModalPassword from "./ModalPassword";
 import { useAuth } from "../../services/AuthContext";
 import { useProfessionalAuth } from "../../services/ProfessionalAuthContext";
+import { useSession } from "../../services/useSession";
 
 const Profile = () => {
   // const { user, logout } = useAuth();
 const { user, logout } = useAuth();
 const { professional } = useProfessionalAuth();
+const { logoutGlobal } = useSession();
 const isProfessional = !!professional;
+
+useEffect(() => {
+  const nuevoNombre = isProfessional
+    ? professional?.full_name || ""
+    : user?.full_name || "";
+  setName(nuevoNombre);
+}, [user, professional]);
+
 
 const [name, setName] = useState(
   isProfessional ? professional?.full_name || "" : user?.full_name || ""
@@ -257,10 +267,7 @@ const [telefono, setTelefono] = useState(
           <div className="border-b-1 border-gray-200 border-t-0 border-l-0 border-r-0 w-full">
             <div
               className="flex items-center w-full pb-2 pt-2 cursor-pointer hover:bg-gray-100 transition rounded"
-              onClick={() => {
-                logout();
-                setName("");
-              }}
+              onClick={logoutGlobal}
             >
               <div className="pr-2">
                 <span className="">

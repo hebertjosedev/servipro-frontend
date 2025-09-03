@@ -8,22 +8,18 @@ const ModalDireccion = ({ onClose }) => {
   const { user, token: userToken, setUser } = useAuth();
   const { professional, token: professionalToken, setProfessional } = useProfessionalAuth();
 
-  console.log("Usuario:", user);
-  console.log("Profesional:", professional);
-
-
   const isProfessional = professional?.role === "professional";
-  const token = userToken || professionalToken;
+  const token = isProfessional ? professionalToken : userToken;
 
-  const [direccion, setDireccion] = useState("");
+  const direccionActual = isProfessional
+    ? professional?.address || ""
+    : user?.address || "";
 
-  // 🔄 Sincroniza la dirección al abrir el modal
+  const [nuevaDireccion, setNuevaDireccion] = useState("");
+
   useEffect(() => {
-    const direccionActual = isProfessional
-      ? professional?.address || ""
-      : user?.address || "";
-    setDireccion(direccionActual);
-  }, [user, professional]);
+    setNuevaDireccion(direccionActual);
+  }, [direccionActual]);
 
   const handleSave = async () => {
     try {
@@ -31,9 +27,14 @@ const ModalDireccion = ({ onClose }) => {
         ? "http://localhost:8000/api/v1/professionals/update-contact"
         : "http://localhost:8000/api/v1/users/update-contact";
 
+      if (!token) {
+        console.error("No hay token disponible para actualizar la dirección.");
+        return;
+      }
+
       const res = await axios.put(
         endpoint,
-        { address: direccion },
+        { address: nuevaDireccion },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -47,7 +48,6 @@ const ModalDireccion = ({ onClose }) => {
         setUser(res.data);
       }
 
-      setDireccion(res.data.address || "");
       onClose();
     } catch (err) {
       console.error("Error al actualizar dirección:", err);
@@ -66,20 +66,21 @@ const ModalDireccion = ({ onClose }) => {
         </button>
         <h2 className="text-xl font-semibold mb-2">Editar Dirección</h2>
 
-        {/* Dirección actual */}
-        {direccion && (
-          <p className="text-sm text-gray-600 mb-2">
-            Dirección actual: <span className="font-medium">{direccion}</span>
-          </p>
-        )}
+        <p className="text-sm text-gray-600 mb-2">
+          Dirección actual:{" "}
+          <span className="font-medium text-gray-800">
+            {direccionActual || "No registrada"}
+          </span>
+        </p>
 
         <input
           type="text"
-          value={direccion}
-          onChange={(e) => setDireccion(e.target.value)}
+          value={nuevaDireccion}
+          onChange={(e) => setNuevaDireccion(e.target.value)}
           className="border px-4 py-2 w-full rounded mb-4"
-          placeholder="Ingresa tu dirección"
+          placeholder="Ingresa tu nueva dirección"
         />
+
         <button
           onClick={handleSave}
           className="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-purple-700 transition"
