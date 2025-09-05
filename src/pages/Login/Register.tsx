@@ -6,7 +6,7 @@ import RegisterUser from "./RegisterUser";
 
 const Register = () => {
   // Info usuarios y profesionales
-  const [user, setUser] = useState(false);
+  const [user, setUser] = useState(true);
   const [professional, setProfessional] = useState(false);
 
   return (

@@ -4,7 +4,14 @@ import { useProfessionalAuth } from "../../services/ProfessionalAuthContext";
 import ModalBase from "./ModalBase";
 import axios from "axios";
 
-const ModalDireccion = ({ onClose }) => {
+export interface ModalDireccionProps {
+  value: string;
+  onChange: (e: any, f: any) => void;
+  onSave: () => Promise<void>;
+  onClose: () => void;
+}
+
+const ModalDireccion = ({ onClose }: ModalDireccionProps) => {
   const { user, token: userToken, setUser } = useAuth();
   const { professional, token: professionalToken, setProfessional } = useProfessionalAuth();
 

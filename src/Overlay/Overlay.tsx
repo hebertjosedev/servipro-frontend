@@ -49,10 +49,10 @@ const Overlay = () => {
               </div>
             </div>
           </header>
-          <main className="px-2 py-2">
+          <main className="px-2 py-2 min-h-screen">
             <Outlet />
           </main>
-          <footer className="footer sm:footer-horizontal bg-base-200 text-neutral-content items-center p-4">
+          <footer className="footer sm:footer-horizontal bg-base-200 text-neutral-content items-center p-4 bg-base-content ">
             <aside className="grid-flow-col items-center">
               <svg
                 width="36"
@@ -115,7 +115,7 @@ const Overlay = () => {
             )}
             <li>
               <NavLink to={"/contactus"} className="text-2xl">
-                Contáctanos
+                Soporte Técnico
               </NavLink>
             </li>
           </ul>
