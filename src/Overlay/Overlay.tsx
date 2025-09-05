@@ -1,8 +1,9 @@
 import { Outlet, NavLink } from "react-router";
-import { useAuth } from "../services/AuthContext";
+// import { useAuth } from "../services/AuthContext";
+import { useSession } from "../services/useSession";
 
 const Overlay = () => {
-  const { user, logout } = useAuth();
+  const { profile, role, logoutGlobal } = useSession();
 
   return (
     <>
@@ -25,11 +26,11 @@ const Overlay = () => {
                 </NavLink>
               </div>
               <div className="navbar-end">
-                {(user && (
+                {(profile && (
                   <NavLink
                     to={""}
                     className="btn bg-blue-700 text-white px-4 py-2 rounded-full shadow hover:bg-blue-700 transition"
-                    onClick={logout}
+                    onClick={logoutGlobal}
                   >
                     Cerrar sesión
                   </NavLink>
@@ -84,19 +85,33 @@ const Overlay = () => {
                 Perfil
               </NavLink>
             </li>
-            {user?.role === "user" && (
-              <li>
-                <NavLink to={"/services"} className="text-2xl">
-                  Solicitar servicio
-                </NavLink>
-              </li>
+            {profile?.role === "user" && (
+              <>
+                <li>
+                  <NavLink to={"/services"} className="text-2xl">
+                    Solicitar servicio
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to={"/services-requests"} className="text-2xl">
+                    Servicios solicitados
+                  </NavLink>
+                </li>
+              </>
             )}
-            {user?.role === "professional" && (
-              <li>
-                <NavLink to={"/requested-services"} className="text-2xl">
-                  Servicios solicitados
-                </NavLink>
-              </li>
+            {profile?.role === "professional" && (
+              <>
+                <li>
+                  <NavLink to={"/requested-services"} className="text-2xl">
+                    Servicios solicitados
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to={"/requested-services-accept"} className="text-2xl">
+                    Servicios aceptados
+                  </NavLink>
+                </li>
+              </>
             )}
             <li>
               <NavLink to={"/contactus"} className="text-2xl">

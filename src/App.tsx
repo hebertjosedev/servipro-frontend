@@ -22,6 +22,8 @@ import { AuthProvider } from "./services/AuthContext";
 import Profile from "./pages/Profile/Profile";
 import RequestedServices from "./pages/RequestedServices";
 import { ProfessionalAuthProvider } from "./services/ProfessionalAuthContext";
+import UserDashboard from "./pages/UserDashboard";
+import AcceptedServices from "./pages/AcceptedServices";
 
 function App() {
   const router = createBrowserRouter([
@@ -50,8 +52,16 @@ function App() {
           element: <Services />,
         },
         {
+          path: "services-requests",
+          element: <UserDashboard />,
+        },
+        {
           path: "requested-services",
           element: <RequestedServices />,
+        },
+        {
+          path: "requested-services-accept",
+          element: <AcceptedServices />,
         },
         {
           path: "contactus",
@@ -89,7 +99,7 @@ function App() {
     <>
       <AuthProvider>
         <ProfessionalAuthProvider>
-        <RouterProvider router={router} />
+          <RouterProvider router={router} />
         </ProfessionalAuthProvider>
       </AuthProvider>
     </>
