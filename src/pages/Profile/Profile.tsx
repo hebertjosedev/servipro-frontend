@@ -8,8 +8,7 @@ import { useProfessionalAuth } from "../../services/ProfessionalAuthContext";
 import { useSession } from "../../services/useSession";
 
 const Profile = () => {
-  // const { user, logout } = useAuth();
-const { user, logout } = useAuth();
+const { user } = useAuth();
 const { professional } = useProfessionalAuth();
 const { logoutGlobal } = useSession();
 const isProfessional = !!professional;
@@ -148,27 +147,11 @@ const [telefono, setTelefono] = useState(
       )}
 
       {activeModal === "telefono" && (
-        <ModalTelefono
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-          onSave={handleSaveTelefono}
-          onClose={() => setActiveModal(null)}
-        />
+        <ModalTelefono onClose={() => setActiveModal(null)} />
       )}
 
       {activeModal === "password" && (
-        <ModalPassword
-          current={currentPassword}
-          newPass={newPassword}
-          confirm={confirmPassword}
-          onChange={(field, value) => {
-            if (field === "current") setCurrentPassword(value);
-            if (field === "newPass") setNewPassword(value);
-            if (field === "confirm") setConfirmPassword(value);
-          }}
-          onSave={handleSavePassword}
-          onClose={() => setActiveModal(null)}
-        />
+        <ModalPassword onClose={() => setActiveModal(null)} />
       )}
 
       <div className="flex flex-col gap-3 items-center justify-center p-8">

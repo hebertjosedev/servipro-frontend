@@ -81,10 +81,17 @@ const Overlay = () => {
           <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
             {/* Sidebar content here */}
             <li>
-              <NavLink to={"/profile"} className="text-2xl">
-                Perfil
+              <NavLink to={"/"} className="text-2xl">
+                Inicio
               </NavLink>
             </li>
+            {profile?.role && (
+              <li>
+                <NavLink to={"/profile"} className="text-2xl">
+                  Perfil
+                </NavLink>
+              </li>
+            )}
             {profile?.role === "user" && (
               <>
                 <li>
@@ -107,7 +114,10 @@ const Overlay = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to={"/requested-services-accept"} className="text-2xl">
+                  <NavLink
+                    to={"/requested-services-accept"}
+                    className="text-2xl"
+                  >
                     Servicios aceptados
                   </NavLink>
                 </li>

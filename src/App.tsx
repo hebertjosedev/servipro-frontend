@@ -5,25 +5,25 @@ import "./App.css";
 
 // Páginas
 import Login from "./pages/Login/Login";
-import Home from "./pages/Home";
+import Home from "./components/Home";
 import Overlay from "./Overlay/Overlay";
 import Register from "./pages/Login/Register";
-import Services from "./pages/Services";
-import Contactus from "./pages/Contactus";
-import Electrician from "./pages/Electrician";
-import Cleaning from "./pages/Cleaning";
-import Technology from "./pages/Technology";
-import Electronic from "./pages/Electronic";
-import Carpentry from "./pages/Carpentry";
-import Plumbing from "./pages/Plumbing";
+import Services from "./components/Services";
+import Contactus from "./components/Contactus";
+import Electrician from "./components/Electrician";
+import Cleaning from "./components/Cleaning";
+import Technology from "./components/Technology";
+import Electronic from "./components/Electronic";
+import Carpentry from "./components/Carpentry";
+import Plumbing from "./components/Plumbing";
 
 // Servicios
 import { AuthProvider } from "./services/AuthContext";
 import Profile from "./pages/Profile/Profile";
-import RequestedServices from "./pages/RequestedServices";
+import RequestedServices from "./components/RequestedServices";
 import { ProfessionalAuthProvider } from "./services/ProfessionalAuthContext";
-import UserDashboard from "./pages/UserDashboard";
-import AcceptedServices from "./pages/AcceptedServices";
+import UserDashboard from "./components/UserDashboard";
+import AcceptedServices from "./components/AcceptedServices";
 
 function App() {
   const router = createBrowserRouter([

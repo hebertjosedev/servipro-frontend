@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-// import { useAuth } from "../services/AuthContext";
 import { useSession } from "../services/useSession";
 import type { ServiceRequestPublic } from "../interfaces/ServiceRequest";
 
 const RequestedServices = () => {
-  // const [requests, setRequests] = useState([]);
   const [requests, setRequests] = useState<ServiceRequestPublic[]>([]);
-  // const { token } = useAuth();
   const { token } = useSession();
 
   useEffect(() => {

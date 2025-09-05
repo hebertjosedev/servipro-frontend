@@ -3,8 +3,9 @@ import axios from "axios";
 import { useAuth } from "../../services/AuthContext";
 import { useProfessionalAuth } from "../../services/ProfessionalAuthContext";
 import ModalBase from "./ModalBase";
+import type { ModalTelefonoProps } from "../../interfaces/ModalTelefonoProps";
 
-const ModalTelefono = ({ onClose }) => {
+const ModalTelefono = ({ onClose }:ModalTelefonoProps) => {
   const { user, token: userToken, setUser } = useAuth();
   const { professional, token: professionalToken, setProfessional } = useProfessionalAuth();
 
