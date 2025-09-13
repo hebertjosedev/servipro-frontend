@@ -17,9 +17,9 @@ const ModalTelefono = ({ onClose }:ModalTelefonoProps) => {
   );
 
   const endpoint = isUser
-    ? "http://localhost:8000/api/v1/users/update-contact"
+    ? "servipro-backend-production.up.railway.app/api/v1/users/update-contact"
     : isProfessional
-    ? "http://localhost:8000/api/v1/professionals/update-contact"
+    ? "servipro-backend-production.up.railway.app/api/v1/professionals/update-contact"
     : null;
 
   const activeToken = userToken || professionalToken;

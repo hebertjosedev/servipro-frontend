@@ -52,7 +52,7 @@ const RegisterUser = () => {
           try {
             // const response = await axios.post cambiado por problema en vercel por no usar
             await axios.post(
-              `http://localhost:8000/api/v1/users/register`,
+              `servipro-backend-production.up.railway.app/api/v1/users/register`,
               {
                 full_name: name,
                 document_type: documentType,

@@ -29,7 +29,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/auth/token",
+        "servipro-backend-production.up.railway.app/api/v1/auth/token",
         new URLSearchParams({
           username,
           password,
@@ -78,7 +78,7 @@ const Login = () => {
 
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/v1/protected",
+        "servipro-backend-production.up.railway.app/api/v1/protected",
         {
           headers: {
             Authorization: `Bearer ${activeToken}`,

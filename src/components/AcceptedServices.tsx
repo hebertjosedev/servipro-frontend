@@ -16,7 +16,7 @@ const AcceptedServices = () => {
     const fetchAccepted = async () => {
       try {
         const res = await fetch(
-          "http://localhost:8000/api/v1/requests/accepted-requests",
+          "servipro-backend-production.up.railway.app/api/v1/requests/accepted-requests",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -37,7 +37,7 @@ const AcceptedServices = () => {
   ) => {
     try {
       const res = await fetch(
-        `http://localhost:8000/api/v1/requests/service-requests/${id}/${action}`,
+        `servipro-backend-production.up.railway.app/api/v1/requests/service-requests/${id}/${action}`,
         {
           method: "PUT",
           headers: {

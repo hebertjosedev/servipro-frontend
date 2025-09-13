@@ -9,7 +9,7 @@ const ModalPassword = ({ onClose }: { onClose: () => void }) => {
 
   const activeToken = userToken || professionalToken;
 
-  const endpoint = "http://localhost:8000/api/v1/auth/change-password";
+  const endpoint = "servipro-backend-production.up.railway.app/api/v1/auth/change-password";
 
 
   const [current, setCurrent] = useState("");

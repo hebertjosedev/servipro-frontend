@@ -51,7 +51,7 @@ export const ProfessionalAuthProvider = ({
       if (token) {
         try {
           const response = await axios.get(
-            "http://localhost:8000/api/v1/auth/me",
+            "servipro-backend-production.up.railway.app/api/v1/auth/me",
             {
               headers: {
                 Authorization: `Bearer ${token}`,

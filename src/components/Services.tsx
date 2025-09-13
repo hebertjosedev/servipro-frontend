@@ -23,7 +23,7 @@ const Electronic = () => {
   ) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/v1/professionals/category/${categoryId}`
+        `servipro-backend-production.up.railway.app/api/v1/professionals/category/${categoryId}`
       );
       setProfessionals(res.data);
       setSelectedCategory(categoryName);
