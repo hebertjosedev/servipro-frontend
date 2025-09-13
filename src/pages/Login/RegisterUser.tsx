@@ -1,23 +1,23 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-import { Navigate, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 const RegisterUser = () => {
 
-      const [user, setUser] = useState(false);
-      const [professional, setProfessional] = useState(false);
+      // const [user, setUser] = useState(false);
+      // const [professional, setProfessional] = useState(false);
       const [name, setName] = useState("");
       const [documentType, setDocumentType] = useState("V");
       const [documento, setDocumento] = useState("");
       // const [birthdate, setBirthdate] = useState("");
-      const myDatepicker = useRef(null);
+      // const myDatepicker = useRef(null);
       const [phone, setPhone] = useState("");
       const [direction, setDirection] = useState("");
       const [email, setEmail] = useState("");
       const [password, setPassword] = useState("");
       const [confirmPassword, setConfirmPassword] = useState("");
-      const [isLoading, setIsLoading] = useState(false); // Estado para el botón de carga
-      const [generalError, setGeneralError] = useState(""); // Para errores generales de la API
+      // const [isLoading, setIsLoading] = useState(false); // Estado para el botón de carga
+      // const [generalError, setGeneralError] = useState(""); // Para errores generales de la API
       const navigate = useNavigate();
 
         useEffect(() => {
@@ -50,7 +50,8 @@ const RegisterUser = () => {
       
           // Realiza la solicitud POST con Axios
           try {
-            const response = await axios.post(
+            // const response = await axios.post cambiado por problema en vercel por no usar
+            await axios.post(
               `http://localhost:8000/api/v1/users/register`,
               {
                 full_name: name,
@@ -77,18 +78,18 @@ const RegisterUser = () => {
             console.error("Error durante el registro:", error);
             if (axios.isAxiosError(error) && error.response) {
               // Error de la API (por ejemplo, validación, usuario ya existe)
-              setGeneralError(
-                error.response.data.detail ||
-                  "Error en el registro. Inténtalo de nuevo."
-              );
+              // setGeneralError(
+              //   error.response.data.detail ||
+              //     "Error en el registro. Inténtalo de nuevo."
+              // );
             } else {
               // Otros errores (por ejemplo, problemas de red)
-              setGeneralError(
-                "Hubo un problema de conexión con el servidor. Inténtalo más tarde."
-              );
+              // setGeneralError(
+              //   "Hubo un problema de conexión con el servidor. Inténtalo más tarde."
+              // );
             }
           } finally {
-            setIsLoading(false); // Desactiva el estado de carga
+            // setIsLoading(false); // Desactiva el estado de carga
           }
         };
 

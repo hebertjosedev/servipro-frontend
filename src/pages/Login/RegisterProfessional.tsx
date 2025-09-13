@@ -1,9 +1,9 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 const RegisterProfessional = () => {
-  const [user, setUser] = useState(false);
+  // const [user, setUser] = useState(false);
   const [professionalCategory, setProfessionalCategory] = useState("");
   const [name, setName] = useState("");
   const [documentType, setDocumentType] = useState("V");
@@ -20,9 +20,9 @@ const RegisterProfessional = () => {
   const [bio, setBio] = useState("");
   const [skills, setSkills] = useState(""); // se enviará como lista
   const [serviceArea, setServiceArea] = useState("");
-  const [categoryId, setCategoryId] = useState(1); // por defecto
-  const [isLoading, setIsLoading] = useState(false); // Estado para el botón de carga
-  const [generalError, setGeneralError] = useState(""); // Para errores generales de la API
+  // const [categoryId, setCategoryId] = useState(1); // por defecto
+  // const [isLoading, setIsLoading] = useState(false); // Estado para el botón de carga
+  // const [generalError, setGeneralError] = useState(""); // Para errores generales de la API
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const RegisterProfessional = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+    // setIsLoading(true);
 
     const skillsArray = skills.split(",").map((s) => s.trim());
 
@@ -57,7 +57,8 @@ const RegisterProfessional = () => {
       console.log("Payload:", {
         category_id: Number(professionalCategory),
       });
-      const response = await axios.post(
+      // const response = await axios.post, esta linea estaba asi pero en vercel me marca el error que no se usa response
+      await axios.post(
         `http://localhost:8000/api/v1/professionals/register`,
         {
           full_name: name,
@@ -86,15 +87,15 @@ const RegisterProfessional = () => {
     } catch (error) {
       console.error("Error durante el registro:", error);
       if (axios.isAxiosError(error) && error.response) {
-        setGeneralError(
-          error.response.data.detail ||
-            "Error en el registro. Inténtalo de nuevo."
-        );
+        // setGeneralError(
+        //   error.response.data.detail ||
+        //     "Error en el registro. Inténtalo de nuevo."
+        // );
       } else {
-        setGeneralError("Hubo un problema de conexión con el servidor.");
+        // setGeneralError("Hubo un problema de conexión con el servidor.");
       }
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 

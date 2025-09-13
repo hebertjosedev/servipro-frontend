@@ -106,9 +106,10 @@ const AcceptedServices = () => {
                       className="btn btn-sm btn-secondary"
                       onClick={() => {
                         setActiveChatRequestId(req.id);
-                        document
-                          .getElementById(`chat_modal_${req.id}`)
-                          ?.showModal();
+                        const dialog = document.getElementById(
+                          `chat_modal_${req.id}`
+                        ) as HTMLDialogElement;
+                        dialog?.showModal();
                       }}
                     >
                       Chat

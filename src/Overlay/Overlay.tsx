@@ -3,7 +3,7 @@ import { Outlet, NavLink } from "react-router";
 import { useSession } from "../services/useSession";
 
 const Overlay = () => {
-  const { profile, role, logoutGlobal } = useSession();
+  const { profile, logoutGlobal } = useSession();
 
   return (
     <>

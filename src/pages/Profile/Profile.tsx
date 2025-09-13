@@ -33,9 +33,9 @@ const [telefono, setTelefono] = useState(
 
   // const [name, setName] = useState(user?.full_name || "");
   // const [telefono, setTelefono] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  // const [currentPassword, setCurrentPassword] = useState("");
+  // const [newPassword, setNewPassword] = useState("");
+  // const [confirmPassword, setConfirmPassword] = useState("");
   const [activeModal, setActiveModal] = useState<string | null>(null);
   // const [direccion, setDireccion] = useState("Av. fuerzas armadas");
 
@@ -48,66 +48,66 @@ const [telefono, setTelefono] = useState(
     setActiveModal(null);
   };
 
-  const handleSaveTelefono = () => {
-    const telefonoValido = /^0(412|414|416|424|426)\d{7}$/.test(telefono);
+  // const handleSaveTelefono = () => {
+  //   const telefonoValido = /^0(412|414|416|424|426)\d{7}$/.test(telefono);
 
-    if (!telefonoValido) {
-      alert("Formato de teléfono inválido. Usa un número como 04121234567.");
-      return;
-    }
+  //   if (!telefonoValido) {
+  //     alert("Formato de teléfono inválido. Usa un número como 04121234567.");
+  //     return;
+  //   }
 
-    console.log("Teléfono guardado:", telefono);
-    setActiveModal(null);
-  };
+  //   console.log("Teléfono guardado:", telefono);
+  //   setActiveModal(null);
+  // };
 
-  const handleSavePassword = async () => {
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      alert("Completa todos los campos.");
-      return;
-    }
+  // const handleSavePassword = async () => {
+  //   if (!currentPassword || !newPassword || !confirmPassword) {
+  //     alert("Completa todos los campos.");
+  //     return;
+  //   }
 
-    if (newPassword.length < 6) {
-      alert("La nueva contraseña debe tener al menos 6 caracteres.");
-      return;
-    }
+  //   if (newPassword.length < 6) {
+  //     alert("La nueva contraseña debe tener al menos 6 caracteres.");
+  //     return;
+  //   }
 
-    if (newPassword !== confirmPassword) {
-      alert("Las contraseñas no coinciden.");
-      return;
-    }
+  //   if (newPassword !== confirmPassword) {
+  //     alert("Las contraseñas no coinciden.");
+  //     return;
+  //   }
 
-    try {
-      const res = await fetch("/api/change-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // Si usas autenticación con JWT, incluye el token aquí:
-          // Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          current_password: currentPassword,
-          new_password: newPassword,
-        }),
-      });
+  //   try {
+  //     const res = await fetch("/api/change-password", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         // Si usas autenticación con JWT, incluye el token aquí:
+  //         // Authorization: `Bearer ${token}`
+  //       },
+  //       body: JSON.stringify({
+  //         current_password: currentPassword,
+  //         new_password: newPassword,
+  //       }),
+  //     });
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      if (res.ok) {
-        alert("Contraseña actualizada con éxito.");
-        setActiveModal(null);
-      } else {
-        alert(data.detail || "Error al cambiar la contraseña.");
-      }
-    } catch (error) {
-      console.error("Error al cambiar la contraseña:", error);
-      alert("Hubo un problema al conectar con el servidor.");
-    }
+  //     if (res.ok) {
+  //       alert("Contraseña actualizada con éxito.");
+  //       setActiveModal(null);
+  //     } else {
+  //       alert(data.detail || "Error al cambiar la contraseña.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error al cambiar la contraseña:", error);
+  //     alert("Hubo un problema al conectar con el servidor.");
+  //   }
 
-    // Limpieza de campos
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-  };
+  //   // Limpieza de campos
+  //   setCurrentPassword("");
+  //   setNewPassword("");
+  //   setConfirmPassword("");
+  // };
 
   useEffect(() => {
   if (activeModal === "direccion") {

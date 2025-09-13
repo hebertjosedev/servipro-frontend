@@ -1,7 +1,8 @@
 // components/ChatPanel.tsx
 import { useEffect, useState, useRef } from "react";
+import type { ChatPanelProps, Message } from "../interfaces/ChatPanelType";
 
-const ChatPanel = ({ requestId, currentUser, token }) => {
+const ChatPanel = ({ requestId, currentUser, token }:ChatPanelProps) => {
   const [messages, setMessages] = useState<{ sender: string; text: string; timestamp: string }[]>([]);
   const [input, setInput] = useState("");
   const socketRef = useRef<WebSocket | null>(null);
@@ -30,8 +31,8 @@ const fetchMessages = async () => {
     const rawData = await res.json();
 
     const normalized = rawData
-      .filter((msg) => msg.text && msg.text.trim() !== "")
-      .map((msg) => ({
+      .filter((msg: Message) => msg.text && msg.text.trim() !== "")
+      .map((msg: Message) => ({
         sender: msg.sender_role,
         text: msg.text,
         timestamp: msg.timestamp,
