@@ -81,9 +81,10 @@ const UserDashboard = () => {
                           className="btn"
                           onClick={() => {
                             setActiveChatRequestId(req.id);
-                            document
-                              .getElementById(`chat_modal_${req.id}`)
-                              ?.showModal();
+                            const dialog = document.getElementById(
+                              `chat_modal_${req.id}`
+                            ) as HTMLDialogElement;
+                            dialog?.showModal();
                           }}
                         >
                           Chat

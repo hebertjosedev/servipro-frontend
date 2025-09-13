@@ -8,28 +8,27 @@ import { useProfessionalAuth } from "../../services/ProfessionalAuthContext";
 import { useSession } from "../../services/useSession";
 
 const Profile = () => {
-const { user } = useAuth();
-const { professional } = useProfessionalAuth();
-const { logoutGlobal } = useSession();
-const isProfessional = !!professional;
+  const { user } = useAuth();
+  const { professional } = useProfessionalAuth();
+  const { logoutGlobal } = useSession();
+  const isProfessional = !!professional;
 
-useEffect(() => {
-  const nuevoNombre = isProfessional
-    ? professional?.full_name || ""
-    : user?.full_name || "";
-  setName(nuevoNombre);
-}, [user, professional]);
+  useEffect(() => {
+    const nuevoNombre = isProfessional
+      ? professional?.full_name || ""
+      : user?.full_name || "";
+    setName(nuevoNombre);
+  }, [user, professional]);
 
-
-const [name, setName] = useState(
-  isProfessional ? professional?.full_name || "" : user?.full_name || ""
-);
-const [direccion, setDireccion] = useState(
-  isProfessional ? professional?.address || "" : user?.address || ""
-);
-const [telefono, setTelefono] = useState(
-  isProfessional ? professional?.phone || "" : user?.phone || ""
-);
+  const [name, setName] = useState(
+    isProfessional ? professional?.full_name || "" : user?.full_name || ""
+  );
+  const [direccion, setDireccion] = useState(
+    isProfessional ? professional?.address || "" : user?.address || ""
+  );
+  const [telefono, setTelefono] = useState(
+    isProfessional ? professional?.phone || "" : user?.phone || ""
+  );
 
   // const [name, setName] = useState(user?.full_name || "");
   // const [telefono, setTelefono] = useState("");
@@ -48,17 +47,17 @@ const [telefono, setTelefono] = useState(
     setActiveModal(null);
   };
 
-  // const handleSaveTelefono = () => {
-  //   const telefonoValido = /^0(412|414|416|424|426)\d{7}$/.test(telefono);
+  const handleSaveTelefono = () => {
+    const telefonoValido = /^0(412|414|416|424|426)\d{7}$/.test(telefono);
 
-  //   if (!telefonoValido) {
-  //     alert("Formato de teléfono inválido. Usa un número como 04121234567.");
-  //     return;
-  //   }
+    if (!telefonoValido) {
+      alert("Formato de teléfono inválido. Usa un número como 04121234567.");
+      return;
+    }
 
-  //   console.log("Teléfono guardado:", telefono);
-  //   setActiveModal(null);
-  // };
+    console.log("Teléfono guardado:", telefono);
+    setActiveModal(null);
+  };
 
   // const handleSavePassword = async () => {
   //   if (!currentPassword || !newPassword || !confirmPassword) {
@@ -110,20 +109,20 @@ const [telefono, setTelefono] = useState(
   // };
 
   useEffect(() => {
-  if (activeModal === "direccion") {
-    const nuevaDireccion = isProfessional
-      ? professional?.address || ""
-      : user?.address || "";
-    setDireccion(nuevaDireccion);
-  }
+    if (activeModal === "direccion") {
+      const nuevaDireccion = isProfessional
+        ? professional?.address || ""
+        : user?.address || "";
+      setDireccion(nuevaDireccion);
+    }
 
-  if (activeModal === "telefono") {
-    const nuevoTelefono = isProfessional
-      ? professional?.phone || ""
-      : user?.phone || "";
-    setTelefono(nuevoTelefono);
-  }
-}, [activeModal, user, professional]);
+    if (activeModal === "telefono") {
+      const nuevoTelefono = isProfessional
+        ? professional?.phone || ""
+        : user?.phone || "";
+      setTelefono(nuevoTelefono);
+    }
+  }, [activeModal, user, professional]);
 
   // useEffect(() => {
   //   if (!activeModal) {
@@ -147,7 +146,12 @@ const [telefono, setTelefono] = useState(
       )}
 
       {activeModal === "telefono" && (
-        <ModalTelefono onClose={() => setActiveModal(null)} />
+        <ModalTelefono
+          value={telefono}
+          onChange={(e) => setTelefono(e.target.value)}
+          onSave={handleSaveTelefono}
+          onClose={() => setActiveModal(null)}
+        />
       )}
 
       {activeModal === "password" && (
