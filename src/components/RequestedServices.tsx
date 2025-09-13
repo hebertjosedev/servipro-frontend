@@ -13,7 +13,7 @@ const RequestedServices = () => {
     const fetchRequests = async () => {
       try {
         const response = await axios.get(
-          "servipro-backend-production.up.railway.app/api/v1/requests/service-requests",
+          "https://servipro-backend-production.up.railway.app/api/v1/requests/service-requests",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -32,7 +32,7 @@ const RequestedServices = () => {
   ) => {
     try {
       const res = await fetch(
-        `servipro-backend-production.up.railway.app/api/v1/requests/service-requests/${id}/${action}`,
+        `https://servipro-backend-production.up.railway.app/api/v1/requests/service-requests/${id}/${action}`,
         {
           method: "PUT",
           headers: {

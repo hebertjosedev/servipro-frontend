@@ -59,7 +59,7 @@ const RegisterProfessional = () => {
       });
       // const response = await axios.post, esta linea estaba asi pero en vercel me marca el error que no se usa response
       await axios.post(
-        `servipro-backend-production.up.railway.app/api/v1/professionals/register`,
+        `https://servipro-backend-production.up.railway.app/api/v1/professionals/register`,
         {
           full_name: name,
           document_type: documentType,

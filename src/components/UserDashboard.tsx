@@ -14,7 +14,7 @@ const UserDashboard = () => {
     if (!token) return; // ⛔ Evita ejecutar si no hay token
     const fetchRequests = async () => {
       const res = await fetch(
-        "servipro-backend-production.up.railway.app/api/v1/requests/user-requests",
+        "https://servipro-backend-production.up.railway.app/api/v1/requests/user-requests",
         {
           headers: {
             Authorization: `Bearer ${token}`,

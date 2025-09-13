@@ -31,8 +31,8 @@ const ModalDireccion = ({ onClose }: ModalDireccionProps) => {
   const handleSave = async () => {
     try {
       const endpoint = isProfessional
-        ? "servipro-backend-production.up.railway.app/api/v1/professionals/update-contact"
-        : "servipro-backend-production.up.railway.app/api/v1/users/update-contact";
+        ? "https://servipro-backend-production.up.railway.app/api/v1/professionals/update-contact"
+        : "https://servipro-backend-production.up.railway.app/api/v1/users/update-contact";
 
       if (!token) {
         console.error("No hay token disponible para actualizar la dirección.");

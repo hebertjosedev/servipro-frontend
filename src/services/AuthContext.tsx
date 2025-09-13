@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (token) {
         try {
           const response = await axios.get(
-            "servipro-backend-production.up.railway.app/api/v1/auth/me",
+            "https://servipro-backend-production.up.railway.app/api/v1/auth/me",
             {
               headers: {
                 Authorization: `Bearer ${token}`,
