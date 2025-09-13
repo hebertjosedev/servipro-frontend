@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router";
 import { useAuth } from "./AuthContext";
 import { useProfessionalAuth } from "./ProfessionalAuthContext";
 
 export const useSession = () => {
+
+  const navigate = useNavigate()
   const {
     user,
     token: userToken,
@@ -29,6 +32,7 @@ export const useSession = () => {
     localStorage.removeItem("userData");
     localStorage.removeItem("professionalToken");
     localStorage.removeItem("professionalData");
+    navigate('/login')
   };
 
   return { role, profile, token, logoutGlobal };
