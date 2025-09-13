@@ -26,83 +26,36 @@ import UserDashboard from "./components/UserDashboard";
 import AcceptedServices from "./components/AcceptedServices";
 
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: "",
-      element: <Overlay />,
-      children: [
-        {
-          index: true,
-          element: <Home />,
-        },
-        {
-          path: "login",
-          element: <Login />,
-        },
-        {
-          path: "register",
-          element: <Register />,
-        },
-        {
-          path: "profile",
-          element: <Profile />,
-        },
-        {
-          path: "services",
-          element: <Services />,
-        },
-        {
-          path: "services-requests",
-          element: <UserDashboard />,
-        },
-        {
-          path: "requested-services",
-          element: <RequestedServices />,
-        },
-        {
-          path: "requested-services-accept",
-          element: <AcceptedServices />,
-        },
-        {
-          path: "contactus",
-          element: <Contactus />,
-        },
-        {
-          path: "electrician",
-          element: <Electrician />,
-        },
-        {
-          path: "cleaning",
-          element: <Cleaning />,
-        },
-        {
-          path: "technology",
-          element: <Technology />,
-        },
-        {
-          path: "electronic",
-          element: <Electronic />,
-        },
-        {
-          path: "carpentry",
-          element: <Carpentry />,
-        },
-        {
-          path: "plumbing",
-          element: <Plumbing />,
-        },
-      ],
-    },
-  ]);
-
   return (
-    <>
-      <AuthProvider>
-        <ProfessionalAuthProvider>
-          <RouterProvider router={router} />
-        </ProfessionalAuthProvider>
-      </AuthProvider>
-    </>
+    <AuthProvider>
+      <ProfessionalAuthProvider>
+        <RouterProvider
+          router={createBrowserRouter([
+            {
+              path: "",
+              element: <Overlay />,
+              children: [
+                { index: true, element: <Home /> },
+                { path: "login", element: <Login /> },
+                { path: "register", element: <Register /> },
+                { path: "profile", element: <Profile /> },
+                { path: "services", element: <Services /> },
+                { path: "services-requests", element: <UserDashboard /> },
+                { path: "requested-services", element: <RequestedServices /> },
+                { path: "requested-services-accept", element: <AcceptedServices /> },
+                { path: "contactus", element: <Contactus /> },
+                { path: "electrician", element: <Electrician /> },
+                { path: "cleaning", element: <Cleaning /> },
+                { path: "technology", element: <Technology /> },
+                { path: "electronic", element: <Electronic /> },
+                { path: "carpentry", element: <Carpentry /> },
+                { path: "plumbing", element: <Plumbing /> },
+              ],
+            },
+          ])}
+        />
+      </ProfessionalAuthProvider>
+    </AuthProvider>
   );
 }
 
