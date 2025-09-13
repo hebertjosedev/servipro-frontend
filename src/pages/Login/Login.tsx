@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../../App.css";
-import { NavLink, useNavigate } from "react-router-dom-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../services/AuthContext";
 import { useProfessionalAuth } from "../../services/ProfessionalAuthContext";
