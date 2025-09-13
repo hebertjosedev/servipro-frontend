@@ -7,12 +7,9 @@ import {
 } from "react";
 import axios from "axios";
 import type { AuthContextType, User } from "../interfaces/AuthContextType";
-import { useNavigate } from "react-router-dom";
 
 // Tipamos el contexto correctamente
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-const navigate = useNavigate()
 
 // Hook personalizado con validación
 export const useAuth = () => {
@@ -71,7 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("userToken");
     setToken(null);
     setUser(null);
-    navigate('/login')
+    window.location.href = "/login";
   };
 
   const authValue: AuthContextType = {
