@@ -7,7 +7,7 @@ import {
 } from "react";
 import axios from "axios";
 import type { AuthContextType, User } from "../interfaces/AuthContextType";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 // Tipamos el contexto correctamente
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
