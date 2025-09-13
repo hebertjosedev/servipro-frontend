@@ -28,7 +28,7 @@ const RequestedServices = () => {
 
   const handleUpdateStatus = async (
     id: number,
-    action: "accept" | "reject"
+    action: "accept" | "reject" | "finalize"
   ) => {
     try {
       const res = await fetch(
@@ -97,7 +97,7 @@ const RequestedServices = () => {
                 </p>
                 <div className="mt-2">
                   <span
-                    className={`badge badge-lg ${
+                    className={`badge badge-md ${
                       req.status === "pendiente"
                         ? "badge-warning"
                         : req.status === "aceptada"
