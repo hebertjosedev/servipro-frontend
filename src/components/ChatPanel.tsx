@@ -1,123 +1,88 @@
 // components/ChatPanel.tsx
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import type { ChatPanelProps, Message } from "../interfaces/ChatPanelType";
+import { useSession } from "../services/useSession";
+import { useChatSocket } from "../hooks/useChatSockets";
 
-const ChatPanel = ({ requestId, currentUser, token }:ChatPanelProps) => {
-  const [messages, setMessages] = useState<{ sender: string; text: string; timestamp: string }[]>([]);
+const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
   const [input, setInput] = useState("");
-  const socketRef = useRef<WebSocket | null>(null);
+  const { chatMessages, addMessage, socketRefs } = useSession();
+  const messages = chatMessages[requestId] || [];
 
-useEffect(() => {
-  if (!token) return;
+  useChatSocket(requestId, token); // ← WebSocket persistente
 
-  // 1. Cargar historial desde el backend
-const fetchMessages = async () => {
-  try {
-    const res = await fetch(`/api/v1/requests/chat-messages/${requestId}`);
-    const contentType = res.headers.get("content-type");
+  useEffect(() => {
+    if (!token) return;
 
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error("❌ Error HTTP:", res.status, errorText);
-      return;
-    }
+    const fetchMessages = async () => {
+      try {
+        const res = await fetch(`/api/v1/requests/chat-messages/${requestId}`);
+        const contentType = res.headers.get("content-type");
 
-    if (!contentType || !contentType.includes("application/json")) {
-      const html = await res.text();
-      console.error("❌ Respuesta no es JSON:", html);
-      return;
-    }
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error("❌ Error HTTP:", res.status, errorText);
+          return;
+        }
 
-    const rawData = await res.json();
+        if (!contentType || !contentType.includes("application/json")) {
+          const html = await res.text();
+          console.error("❌ Respuesta no es JSON:", html);
+          return;
+        }
 
-    const normalized = rawData
-      .filter((msg: Message) => msg.text && msg.text.trim() !== "")
-      .map((msg: Message) => ({
-        sender: msg.sender_role,
-        text: msg.text,
-        timestamp: msg.timestamp,
-      }));
+        const rawData = await res.json();
 
-    setMessages(normalized);
-  } catch (err) {
-    console.error("❌ Error al cargar historial:", err);
-  }
-};
+        const normalized = rawData
+          .filter((msg: Message) => msg.text && msg.text.trim() !== "")
+          .map((msg: Message) => ({
+            sender: msg.sender_role,
+            text: msg.text,
+            timestamp: msg.timestamp,
+          }));
 
-  fetchMessages(); // ← Esto carga los mensajes persistidos
-
-  // 2. Conectar WebSocket
-  const socket = new WebSocket(`wss://servipro-backend-production.up.railway.app/api/v1/requests/ws/chat/${requestId}?token=${token}`);
-  socketRef.current = socket;
-
-  socket.onopen = () => {
-    console.log("✅ WebSocket conectado");
-    socket.send(JSON.stringify({ type: "ping", content: "Hola desde el cliente" }));
-  };
-
-socket.onmessage = (event) => {
-  try {
-    const data = JSON.parse(event.data);
-    console.log("📨 Mensaje recibido:", data);
-
-    const msg = data.original || data;
-    if (msg.text && msg.text.trim() !== "") {
-      const normalizedMsg = {
-        sender: msg.role || msg.sender, // depende de cómo lo envíes desde el backend
-        text: msg.text,
-        timestamp: msg.timestamp || new Date().toISOString(), // fallback si no viene timestamp
-      };
-
-      setMessages((prev) => [...prev, normalizedMsg]);
-    }
-  } catch (err) {
-    console.error("❌ Error al parsear mensaje:", err);
-  }
-};
-
-  socket.onerror = (err) => {
-    console.error("❌ Error en WebSocket:", err);
-  };
-
-  socket.onclose = () => {
-    console.warn("🔒 WebSocket cerrado");
-  };
-
-  return () => {
-    socket.close();
-  };
-}, [requestId, token]);
-
-const sendMessage = () => {
-  if (socketRef.current && input.trim()) {
-    const message = {
-      sender: currentUser.role,
-      text: input,
+        normalized.forEach((msg:Message) => {
+          addMessage(requestId, msg);
+        });
+      } catch (err) {
+        console.error("❌ Error al cargar historial:", err);
+      }
     };
-    socketRef.current.send(JSON.stringify(message));
-    setInput(""); // solo limpiamos el input
-  }
-};
+
+    fetchMessages();
+  }, [requestId, token, addMessage]);
+
+  const sendMessage = () => {
+    const socket = socketRefs.current[requestId];
+    if (socket && input.trim()) {
+      const message = {
+        sender: currentUser.role,
+        text: input,
+      };
+      socket.send(JSON.stringify(message));
+      setInput("");
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4">
       <div className="h-64 overflow-y-auto border rounded p-2 bg-gray-50">
-{messages
-    .filter((msg) => msg.text && msg.text.trim() !== "")
-    .map((msg, idx) => (
-      <div
-        key={idx}
-        className={`p-2 mb-1 rounded ${
-          msg.sender === currentUser.role
-            ? "bg-blue-100 text-right"
-            : "bg-gray-200 text-left"
-        }`}
-      >
-        <strong>{msg.sender.toUpperCase()}:</strong> {msg.text}
-        <br />
-        <small>{new Date(msg.timestamp).toLocaleTimeString()}</small>
-      </div>
-    ))}
+        {messages
+          .filter((msg) => msg.text && msg.text.trim() !== "")
+          .map((msg, idx) => (
+            <div
+              key={idx}
+              className={`p-2 mb-1 rounded ${
+                msg.sender === currentUser.role
+                  ? "bg-blue-100 text-right"
+                  : "bg-gray-200 text-left"
+              }`}
+            >
+              <strong>{msg.sender.toUpperCase()}:</strong> {msg.text}
+              <br />
+              <small>{new Date(msg.timestamp).toLocaleTimeString()}</small>
+            </div>
+          ))}
       </div>
       <div className="flex gap-2">
         <input
