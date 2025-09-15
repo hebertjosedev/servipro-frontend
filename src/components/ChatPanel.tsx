@@ -47,7 +47,7 @@ const fetchMessages = async () => {
   fetchMessages(); // ← Esto carga los mensajes persistidos
 
   // 2. Conectar WebSocket
-  const socket = new WebSocket(`ws://localhost:8000/api/v1/requests/ws/chat/${requestId}?token=${token}`);
+  const socket = new WebSocket(`ws://servipro-backend-production.up.railway.app/api/v1/requests/ws/chat/${requestId}?token=${token}`);
   socketRef.current = socket;
 
   socket.onopen = () => {
