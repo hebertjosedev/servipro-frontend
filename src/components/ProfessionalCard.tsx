@@ -26,7 +26,7 @@ export const ProfessionalCard = ({ professional }: Props) => {
       return;
     }
 
-    await axios.post("servipro-backend-production.up.railway.app/api/v1/requests/request-service", {
+    await axios.post("https://servipro-backend-production.up.railway.app/api/v1/requests/request-service", {
       user_id: user.id,
       professional_id: selectedProfessional.id,
       description: problemDescription,
