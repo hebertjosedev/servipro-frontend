@@ -13,3 +13,9 @@ export interface Message {
   sender_role: string;
   // agrega más campos si los tienes
 }
+
+export interface DisplayMessage {
+  sender: string;
+  text: string;
+  timestamp: string;
+}

@@ -1,8 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import { useProfessionalAuth } from "./ProfessionalAuthContext";
+import { useRef, useState } from "react";
+import type { DisplayMessage } from "../interfaces/ChatPanelType";
 
 export const useSession = () => {
+
+  const [chatMessages, setChatMessages] = useState<Record<number, DisplayMessage[]>>({});
+  const socketRefs = useRef<Record<number, WebSocket>>({});
 
   const navigate = useNavigate()
   const {
@@ -35,5 +40,29 @@ export const useSession = () => {
     navigate('/login')
   };
 
-  return { role, profile, token, logoutGlobal };
+  const addMessage = (requestId: number, message: DisplayMessage) => {
+  setChatMessages((prev) => ({
+    ...prev,
+    [requestId]: [...(prev[requestId] || []), message],
+  }));
+  };
+
+  const clearMessages = (requestId: number) => {
+    setChatMessages((prev) => {
+      const updated = { ...prev };
+      delete updated[requestId];
+      return updated;
+    });
+  };
+
+    return {
+    role,
+    profile,
+    token,
+    logoutGlobal,
+    chatMessages,
+    addMessage,
+    clearMessages,
+    socketRefs,
+  };
 };
