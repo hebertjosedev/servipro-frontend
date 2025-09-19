@@ -41,7 +41,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
             timestamp: msg.timestamp,
           }));
 
-        normalized.forEach((msg:Message) => {
+        normalized.forEach((msg: Message) => {
           addMessage(requestId, msg);
         });
       } catch (err) {
@@ -56,7 +56,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
     const socket = socketRefs.current[requestId];
     if (socket && input.trim()) {
       const message = {
-        sender: currentUser.role,
+        type: "chat", // ← esto activa el flujo correcto en el backend
         text: input,
       };
       socket.send(JSON.stringify(message));
