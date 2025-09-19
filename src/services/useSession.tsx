@@ -4,16 +4,12 @@ import { useRef, useState } from "react";
 import type { DisplayMessage } from "../interfaces/ChatPanelType";
 
 export const useSession = () => {
-
-  const [chatMessages, setChatMessages] = useState<Record<number, DisplayMessage[]>>({});
+  const [chatMessages, setChatMessages] = useState<
+    Record<number, DisplayMessage[]>
+  >({});
   const socketRefs = useRef<Record<number, WebSocket>>({});
 
-  const {
-    user,
-    token: userToken,
-    logout: logoutUser,
-    setUser,
-  } = useAuth();
+  const { user, token: userToken, logout: logoutUser, setUser } = useAuth();
 
   const {
     professional,
@@ -38,10 +34,22 @@ export const useSession = () => {
   };
 
   const addMessage = (requestId: number, message: DisplayMessage) => {
-  setChatMessages((prev) => ({
-    ...prev,
-    [requestId]: [...(prev[requestId] || []), message],
-  }));
+    setChatMessages((prev) => {
+      const existing = prev[requestId] || [];
+
+      const isDuplicate = existing.some(
+        (m) =>
+          m.text === message.text &&
+          m.sender === message.sender &&
+          m.timestamp === message.timestamp
+      );
+      if (isDuplicate) return prev;
+
+      return {
+        ...prev,
+        [requestId]: [...existing, message],
+      };
+    });
   };
 
   const clearMessages = (requestId: number) => {
@@ -52,7 +60,7 @@ export const useSession = () => {
     });
   };
 
-    return {
+  return {
     role,
     profile,
     token,
