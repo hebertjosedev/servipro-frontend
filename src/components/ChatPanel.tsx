@@ -90,7 +90,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
                   : "bg-gray-200 text-left"
               }`}
             >
-              <strong>{msg.sender.toUpperCase()}:</strong> {msg.text}
+              <strong>{msg.sender?.toUpperCase() || "Desconocido"}:</strong> {msg.text}
               <br />
               <small>{new Date(msg.timestamp).toLocaleTimeString()}</small>
             </div>

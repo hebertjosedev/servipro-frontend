@@ -30,13 +30,20 @@ export const useChatSocket = (requestId: number, token: string) => {
 
         console.log("📥 Mensaje recibido:", msg);
 
-        if (msg.type === "chat" && msg.text?.trim()) {
+        if (
+          msg.type === "chat" &&
+          msg.text?.trim() &&
+          typeof msg.sender === "string" &&
+          typeof msg.role === "string"
+        ) {
           addMessage(requestId, {
             sender: msg.sender,
             role: msg.role,
             text: msg.text,
             timestamp: msg.timestamp || new Date().toISOString(),
           });
+        } else {
+          console.warn("⚠️ Mensaje ignorado por formato incompleto:", msg);
         }
       } catch (err) {
         console.error("❌ Error al parsear mensaje:", err);
