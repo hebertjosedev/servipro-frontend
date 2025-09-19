@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSession } from "../services/useSession";
+// import { useSession } from "../services/useSession";
+import { useSessionContext } from "../services/SessionContext";
 import type { ServiceRequestPublic } from "../interfaces/ServiceRequest";
 
 const RequestedServices = () => {
   const [requests, setRequests] = useState<ServiceRequestPublic[]>([]);
-  const { token } = useSession();
+  const { token } = useSessionContext();
 
   useEffect(() => {
     if (!token) return; // ⛔ Evita ejecutar si no hay token

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useSession } from "../services/useSession";
+// import { useSession } from "../services/useSession";
+import { useSessionContext } from "../services/SessionContext";
 import type { UserRequest } from "../interfaces/UserRequest";
 import ChatPanel from "./ChatPanel";
 
 const UserDashboard = () => {
-  const { token } = useSession();
+  const { token } = useSessionContext();
   const [requests, setRequests] = useState<UserRequest[]>([]);
   const [activeChatRequestId, setActiveChatRequestId] = useState<number | null>(
     null

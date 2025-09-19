@@ -1,9 +1,10 @@
 import { Outlet, NavLink } from "react-router-dom";
 // import { useAuth } from "../services/AuthContext";
-import { useSession } from "../services/useSession";
+// import { useSession } from "../services/useSession";
+import { useSessionContext } from "../services/SessionContext";
 
 const Overlay = () => {
-  const { profile, logoutGlobal } = useSession();
+  const { profile, logoutGlobal } = useSessionContext();
 
   return (
     <>

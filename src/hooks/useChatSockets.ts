@@ -1,9 +1,10 @@
 // hooks/useChatSocket.ts
 import { useEffect } from "react";
-import { useSession } from "../services/useSession";
+// import { useSession } from "../services/useSession";
+import { useSessionContext } from "../services/SessionContext";
 
 export const useChatSocket = (requestId: number, token: string) => {
-  const { socketRefs, addMessage } = useSession();
+  const { socketRefs, addMessage } = useSessionContext();
 
   useEffect(() => {
     if (!token || socketRefs.current[requestId]) return;
@@ -13,6 +14,7 @@ export const useChatSocket = (requestId: number, token: string) => {
     );
 
     socketRefs.current[requestId] = socket;
+    console.log("📌 Socket registrado en socketRefs para requestId:", requestId);
 
     socket.onopen = () => {
       console.log(`✅ WebSocket conectado para request ${requestId}`);

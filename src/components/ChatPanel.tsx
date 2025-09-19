@@ -1,12 +1,13 @@
 // components/ChatPanel.tsx
 import { useEffect, useState } from "react";
 import type { ChatPanelProps, Message } from "../interfaces/ChatPanelType";
-import { useSession } from "../services/useSession";
+// import { useSession } from "../services/useSession";
+import { useSessionContext } from "../services/SessionContext";
 import { useChatSocket } from "../hooks/useChatSockets";
 
 const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
   const [input, setInput] = useState("");
-  const { chatMessages, addMessage, socketRefs } = useSession();
+  const { chatMessages, addMessage, socketRefs } = useSessionContext();
   const messages = chatMessages[requestId] || [];
 
   useChatSocket(requestId, token); // ← WebSocket persistente

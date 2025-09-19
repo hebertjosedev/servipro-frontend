@@ -24,11 +24,13 @@ import RequestedServices from "./components/RequestedServices";
 import { ProfessionalAuthProvider } from "./services/ProfessionalAuthContext";
 import UserDashboard from "./components/UserDashboard";
 import AcceptedServices from "./components/AcceptedServices";
+import { SessionProvider } from "./services/SessionContext";
 
 function App() {
   return (
     <AuthProvider>
       <ProfessionalAuthProvider>
+        <SessionProvider>
         <RouterProvider
           router={createBrowserRouter([
             {
@@ -54,6 +56,7 @@ function App() {
             },
           ])}
         />
+        </SessionProvider>
       </ProfessionalAuthProvider>
     </AuthProvider>
   );
