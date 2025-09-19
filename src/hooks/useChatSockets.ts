@@ -16,7 +16,7 @@ export const useChatSocket = (requestId: number, token: string) => {
 
     socket.onopen = () => {
       console.log(`✅ WebSocket conectado para request ${requestId}`);
-      socket.send(JSON.stringify({ type: "ping", content: "Hola desde el cliente" }));
+      socket.send(JSON.stringify({ type: "ping" }));
     };
 
     socket.onmessage = (event) => {
