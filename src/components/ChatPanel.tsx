@@ -54,7 +54,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
     };
 
     fetchMessages();
-  }, [requestId, token, addMessage]);
+  }, [requestId, token]);
 
   const sendMessage = () => {
     const socket = socketRefs.current[requestId];
