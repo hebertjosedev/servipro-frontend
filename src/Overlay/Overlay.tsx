@@ -1,10 +1,18 @@
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 // import { useAuth } from "../services/AuthContext";
 // import { useSession } from "../services/useSession";
 import { useSessionContext } from "../services/SessionContext";
 
 const Overlay = () => {
   const { profile, logoutGlobal } = useSessionContext();
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    console.log("🚪 Cerrando sesión...");
+    logoutGlobal();
+    navigate("/login");
+  };
 
   return (
     <>
@@ -28,13 +36,12 @@ const Overlay = () => {
               </div>
               <div className="navbar-end">
                 {(profile && (
-                  <NavLink
-                    to={""}
+                  <button
                     className="btn bg-blue-700 text-white px-4 py-2 rounded-full shadow hover:bg-blue-700 transition"
-                    onClick={logoutGlobal}
+                    onClick={handleLogout}
                   >
                     Cerrar sesión
-                  </NavLink>
+                  </button>
                 )) || (
                   <NavLink
                     to={"/login"}

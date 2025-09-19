@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import { useProfessionalAuth } from "./ProfessionalAuthContext";
 import { useRef, useState } from "react";
@@ -9,7 +8,6 @@ export const useSession = () => {
   const [chatMessages, setChatMessages] = useState<Record<number, DisplayMessage[]>>({});
   const socketRefs = useRef<Record<number, WebSocket>>({});
 
-  const navigate = useNavigate()
   const {
     user,
     token: userToken,
@@ -37,7 +35,6 @@ export const useSession = () => {
     localStorage.removeItem("userData");
     localStorage.removeItem("professionalToken");
     localStorage.removeItem("professionalData");
-    navigate('/login')
   };
 
   const addMessage = (requestId: number, message: DisplayMessage) => {

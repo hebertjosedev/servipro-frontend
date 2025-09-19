@@ -6,6 +6,7 @@ import ModalPassword from "./ModalPassword";
 import { useAuth } from "../../services/AuthContext";
 import { useProfessionalAuth } from "../../services/ProfessionalAuthContext";
 import { useSession } from "../../services/useSession";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const { user } = useAuth();
@@ -57,6 +58,13 @@ const Profile = () => {
 
     console.log("Teléfono guardado:", telefono);
     setActiveModal(null);
+  };
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutGlobal(); // limpia sesión
+    navigate("/login"); // redirige
   };
 
   // const handleSavePassword = async () => {
@@ -254,7 +262,7 @@ const Profile = () => {
           <div className="border-b-1 border-gray-200 border-t-0 border-l-0 border-r-0 w-full">
             <div
               className="flex items-center w-full pb-2 pt-2 cursor-pointer hover:bg-gray-100 transition rounded"
-              onClick={logoutGlobal}
+              onClick={handleLogout}
             >
               <div className="pr-2">
                 <span className="">
