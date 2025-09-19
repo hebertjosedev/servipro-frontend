@@ -1,6 +1,6 @@
 // components/ChatPanel.tsx
 import { useEffect, useState } from "react";
-import type { ChatPanelProps, Message } from "../interfaces/ChatPanelType";
+import type { ChatPanelProps, DisplayMessage, Message } from "../interfaces/ChatPanelType";
 // import { useSession } from "../services/useSession";
 import { useSessionContext } from "../services/SessionContext";
 import { useChatSocket } from "../hooks/useChatSockets";
@@ -36,15 +36,16 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
 
         const rawData = await res.json();
 
-        const normalized = rawData
+        const normalized: DisplayMessage[] = rawData
           .filter((msg: Message) => msg.text && msg.text.trim() !== "")
           .map((msg: Message) => ({
             sender: msg.sender_role,
+            role: msg.sender_role,
             text: msg.text,
             timestamp: msg.timestamp,
           }));
 
-        normalized.forEach((msg: Message) => {
+        normalized.forEach((msg: DisplayMessage) => {
           addMessage(requestId, msg);
         });
       } catch (err) {
@@ -84,7 +85,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
             <div
               key={idx}
               className={`p-2 mb-1 rounded ${
-                msg.sender === currentUser.role
+                msg.role === currentUser.role
                   ? "bg-blue-100 text-right"
                   : "bg-gray-200 text-left"
               }`}

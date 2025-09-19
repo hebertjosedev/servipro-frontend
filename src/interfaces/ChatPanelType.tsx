@@ -16,6 +16,7 @@ export interface Message {
 
 export interface DisplayMessage {
   sender: string;
+  role: string;
   text: string;
   timestamp: string;
 }

@@ -14,7 +14,10 @@ export const useChatSocket = (requestId: number, token: string) => {
     );
 
     socketRefs.current[requestId] = socket;
-    console.log("📌 Socket registrado en socketRefs para requestId:", requestId);
+    console.log(
+      "📌 Socket registrado en socketRefs para requestId:",
+      requestId
+    );
 
     socket.onopen = () => {
       console.log(`✅ WebSocket conectado para request ${requestId}`);
@@ -23,12 +26,14 @@ export const useChatSocket = (requestId: number, token: string) => {
 
     socket.onmessage = (event) => {
       try {
-        const data = JSON.parse(event.data);
-        const msg = data.original || data;
+        const msg = JSON.parse(event.data);
 
-        if (msg.text && msg.text.trim() !== "") {
+        console.log("📥 Mensaje recibido:", msg);
+
+        if (msg.type === "chat" && msg.text?.trim()) {
           addMessage(requestId, {
-            sender: msg.role || msg.sender,
+            sender: msg.sender,
+            role: msg.role,
             text: msg.text,
             timestamp: msg.timestamp || new Date().toISOString(),
           });
