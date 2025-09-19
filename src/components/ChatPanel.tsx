@@ -16,7 +16,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
 
     const fetchMessages = async () => {
       try {
-        const res = await fetch(`/api/v1/requests/chat-messages/${requestId}`);
+        const res = await fetch(`https://servipro-backend-production.up.railway.app/api/v1/requests/chat-messages/${requestId}`);
         const contentType = res.headers.get("content-type");
 
         if (!res.ok) {
