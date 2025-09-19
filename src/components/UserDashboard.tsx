@@ -95,12 +95,21 @@ const UserDashboard = () => {
                               Chat con {req.professional_name}
                             </h3>
 
-                            {activeChatRequestId === req.id && token && (
-                              <ChatPanel
-                                requestId={req.id}
-                                token={token}
-                                currentUser={{ role: "usuario" }}
-                              />
+                            {token && (
+                              <div
+                                style={{
+                                  display:
+                                    activeChatRequestId === req.id
+                                      ? "block"
+                                      : "none",
+                                }}
+                              >
+                                <ChatPanel
+                                  requestId={req.id}
+                                  token={token}
+                                  currentUser={{ role: "usuario" }}
+                                />
+                              </div>
                             )}
 
                             <form method="dialog" className="modal-action">
