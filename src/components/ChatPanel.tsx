@@ -16,7 +16,9 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
 
     const fetchMessages = async () => {
       try {
-        const res = await fetch(`https://servipro-backend-production.up.railway.app/api/v1/requests/chat-messages/${requestId}`);
+        const res = await fetch(
+          `https://servipro-backend-production.up.railway.app/api/v1/requests/chat-messages/${requestId}`
+        );
         const contentType = res.headers.get("content-type");
 
         if (!res.ok) {
@@ -54,15 +56,23 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
 
   const sendMessage = () => {
     const socket = socketRefs.current[requestId];
+    console.log("📤 Intentando enviar:", input);
+    console.log("🔌 Estado del socket:", socket?.readyState);
+    console.log("🔌 Socket:", socket);
     if (socket && input.trim()) {
       const message = {
-        type: "chat", // ← esto activa el flujo correcto en el backend
+        type: "chat",
         text: input,
       };
       socket.send(JSON.stringify(message));
+      console.log("✅ Mensaje enviado:", message);
       setInput("");
+    } else {
+      console.warn("⚠️ No se envió: socket cerrado o input vacío");
     }
   };
+  
+
 
   return (
     <div className="flex flex-col gap-4">
