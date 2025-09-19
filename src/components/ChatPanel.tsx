@@ -39,7 +39,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
         const normalized: DisplayMessage[] = rawData
           .filter((msg: Message) => msg.text && msg.text.trim() !== "")
           .map((msg: Message) => ({
-            sender: msg.sender_role,
+            sender: msg.sender,
             role: msg.sender_role,
             text: msg.text,
             timestamp: msg.timestamp,
