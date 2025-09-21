@@ -82,6 +82,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
     if (socket?.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify({ type: "chat", text: trimmed }));
       setInput("");
+      clearNewMessage(requestId); // ✅ Limpia al enviar
     } else {
       console.warn("⚠️ No se envió: socket cerrado o inválido");
     }
