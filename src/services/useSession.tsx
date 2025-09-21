@@ -4,13 +4,24 @@ import { useRef, useState } from "react";
 import type { DisplayMessage } from "../interfaces/ChatPanelType";
 
 export const useSession = () => {
-  const [chatMessages, setChatMessages] = useState<
-    Record<number, DisplayMessage[]>
-  >({});
+  // 💬 Mensajes por solicitud
+  const [chatMessages, setChatMessages] = useState<Record<number, DisplayMessage[]>>({});
+
+  // 🔔 Notificaciones por solicitud
+  const [hasNewMessages, setHasNewMessages] = useState<Record<number, boolean>>({});
+
+  // 💬 Estado de escritura por solicitud
+  const [typingStatus, setTypingStatus] = useState<Record<number, boolean>>({});
+
+  // 📍 Chat activo
+  const [activeRequestId, setActiveRequestId] = useState<number | null>(null);
+  const chatIsOpen = (id: number) => activeRequestId === id;
+
+  // 🔌 WebSocket por solicitud
   const socketRefs = useRef<Record<number, WebSocket>>({});
 
+  // 🔐 Autenticación
   const { user, token: userToken, logout: logoutUser, setUser } = useAuth();
-
   const {
     professional,
     token: professionalToken,
@@ -22,6 +33,7 @@ export const useSession = () => {
   const profile = user || professional;
   const token = userToken || professionalToken;
 
+  // 🔓 Logout global
   const logoutGlobal = () => {
     logoutUser();
     logoutProfessional();
@@ -33,18 +45,11 @@ export const useSession = () => {
     localStorage.removeItem("professionalData");
   };
 
+  // 💬 Agregar mensaje
   const addMessage = (requestId: number, message: DisplayMessage) => {
     setChatMessages((prev) => {
       const existing = prev[requestId] || [];
-
       const isDuplicate = existing.some((m) => m.message_id === message.message_id);
-
-      // const isDuplicate = existing.some(
-      //   (m) =>
-      //     m.text === message.text &&
-      //     m.sender === message.sender &&
-      //     m.timestamp === message.timestamp
-      // );
       if (isDuplicate) return prev;
 
       return {
@@ -54,12 +59,23 @@ export const useSession = () => {
     });
   };
 
+  // 💬 Limpiar mensajes
   const clearMessages = (requestId: number) => {
     setChatMessages((prev) => {
       const updated = { ...prev };
       delete updated[requestId];
       return updated;
     });
+  };
+
+  // 🔔 Marcar nuevo mensaje
+  const markNewMessage = (requestId: number) => {
+    setHasNewMessages((prev) => ({ ...prev, [requestId]: true }));
+  };
+
+  // 🔔 Limpiar notificación
+  const clearNewMessage = (requestId: number) => {
+    setHasNewMessages((prev) => ({ ...prev, [requestId]: false }));
   };
 
   return {
@@ -71,5 +87,13 @@ export const useSession = () => {
     addMessage,
     clearMessages,
     socketRefs,
+    hasNewMessages,
+    markNewMessage,
+    clearNewMessage,
+    typingStatus,
+    setTypingStatus,
+    activeRequestId,
+    setActiveRequestId,
+    chatIsOpen,
   };
 };

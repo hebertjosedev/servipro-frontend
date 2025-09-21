@@ -4,7 +4,12 @@ import { useEffect } from "react";
 import { useSessionContext } from "../services/SessionContext";
 
 export const useChatSocket = (requestId: number, token: string) => {
-  const { socketRefs, addMessage } = useSessionContext();
+  const {
+  markNewMessage,
+  setTypingStatus,
+  chatIsOpen,
+  } = useSessionContext();
+
 
   useEffect(() => {
   if (!token || !requestId) return;
@@ -27,37 +32,59 @@ export const useChatSocket = (requestId: number, token: string) => {
     socket.send(JSON.stringify({ type: "ping" }));
   };
 
-  socket.onmessage = (event) => {
-    try {
-      const msg = JSON.parse(event.data);
+socket.onmessage = (event) => {
+  try {
+    const msg = JSON.parse(event.data);
 
-      if (
-        msg.type === "chat" &&
-        msg.text?.trim() &&
-        typeof msg.sender === "string" &&
-        typeof msg.role === "string"
-      ) {
-        addMessage(requestId, {
-          message_id: msg.message_id,
-          sender: msg.sender,
-          role: msg.role,
-          text: msg.text,
-          timestamp: msg.timestamp || new Date().toISOString(),
-        });
-      } else {
-        console.warn("⚠️ Mensaje ignorado por formato incompleto:", msg);
+    if (
+      msg.type === "chat" &&
+      msg.text?.trim() &&
+      typeof msg.sender === "string" &&
+      typeof msg.role === "string"
+    ) {
+      addMessage(requestId, {
+        message_id: msg.message_id,
+        sender: msg.sender,
+        role: msg.role,
+        text: msg.text,
+        timestamp: msg.timestamp || new Date().toISOString(),
+      });
+
+      // 🔔 Notificación si el chat no está abierto
+      if (!chatIsOpen(requestId)) {
+        markNewMessage(requestId);
       }
-    } catch (err) {
-      console.error("❌ Error al parsear mensaje:", err);
     }
-  };
+
+    // 💬 Evento de escritura
+    else if (msg.type === "typing") {
+      setTypingStatus((prev) => ({
+        ...prev,
+        [requestId]: true,
+      }));
+
+      setTimeout(() => {
+        setTypingStatus((prev) => ({
+          ...prev,
+          [requestId]: false,
+        }));
+      }, 3000);
+    }
+
+    else {
+      console.warn("⚠️ Evento ignorado por tipo desconocido:", msg);
+    }
+  } catch (err) {
+    console.error("❌ Error al parsear mensaje:", err);
+  }
+};
+
 
   socket.onerror = (err) => {
     console.error("❌ Error en WebSocket:", err);
   };
 
   socket.onclose = () => {
-    console.warn(`🔒 WebSocket cerrado para request ${requestId}`);
     delete socketRefs.current[requestId];
   };
 

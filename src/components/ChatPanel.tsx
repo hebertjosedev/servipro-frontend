@@ -1,13 +1,18 @@
 // components/ChatPanel.tsx
 import { useEffect, useState } from "react";
-import type { ChatPanelProps, DisplayMessage, Message } from "../interfaces/ChatPanelType";
+import type {
+  ChatPanelProps,
+  DisplayMessage,
+  Message,
+} from "../interfaces/ChatPanelType";
 // import { useSession } from "../services/useSession";
 import { useSessionContext } from "../services/SessionContext";
 import { useChatSocket } from "../hooks/useChatSockets";
 
 const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
   const [input, setInput] = useState("");
-  const { chatMessages, addMessage, socketRefs } = useSessionContext();
+  const { chatMessages, addMessage, socketRefs, typingStatus } =
+    useSessionContext();
   const messages = chatMessages[requestId] || [];
 
   useChatSocket(requestId, token); // ← WebSocket persistente
@@ -39,8 +44,10 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
         const normalized: DisplayMessage[] = rawData
           .filter((msg: Message) => msg.text && msg.text.trim() !== "")
           .map((msg: Message) => {
-            const name = msg.sender_name || msg.sender?.split("@")[0] || "Desconocido";
-            const roleLabel = msg.sender_role === "user" ? "USUARIO" : "PROFESIONAL";
+            const name =
+              msg.sender_name || msg.sender?.split("@")[0] || "Desconocido";
+            const roleLabel =
+              msg.sender_role === "user" ? "USUARIO" : "PROFESIONAL";
             return {
               message_id: msg.message_id,
               sender: `${roleLabel} - ${name}`,
@@ -74,12 +81,25 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
       console.warn("⚠️ No se envió: socket cerrado o input vacío");
     }
   };
-  
 
+  const handleTyping = () => {
+    const socket = socketRefs.current[requestId];
+    if (socket?.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ type: "typing" }));
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4">
       <div className="h-64 overflow-y-auto border rounded p-2 bg-gray-50">
+        {typingStatus[requestId] && (
+          <div className="text-sm italic text-gray-500 mb-2 text-left animate-pulse">
+            {currentUser.role === "user"
+              ? "Profesional está escribiendo..."
+              : "Usuario está escribiendo..."}
+          </div>
+        )}
+
         {messages
           .filter((msg) => msg.text && msg.text.trim() !== "")
           .map((msg, idx) => (
@@ -91,7 +111,8 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
                   : "bg-gray-200 text-left"
               }`}
             >
-              <strong>{msg.sender?.toUpperCase() || "Desconocido"}:</strong> {msg.text}
+              <strong>{msg.sender?.toUpperCase() || "Desconocido"}:</strong>{" "}
+              {msg.text}
               <br />
               <small>{new Date(msg.timestamp).toLocaleTimeString()}</small>
             </div>
@@ -100,7 +121,10 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
       <div className="flex gap-2">
         <input
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            setInput(e.target.value);
+            handleTyping(); // 💬 Emitir evento
+          }}
           className="flex-1 border rounded px-2"
           placeholder="Escribe un mensaje..."
         />
