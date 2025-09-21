@@ -6,6 +6,7 @@ export interface ChatPanelProps {
 
 export interface Message {
   id: number;
+  message_id: string;
   content: string;
   sender: string;
   timestamp: string;

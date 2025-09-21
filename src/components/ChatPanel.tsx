@@ -42,6 +42,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
             const name = msg.sender_name || msg.sender?.split("@")[0] || "Desconocido";
             const roleLabel = msg.sender_role === "user" ? "USUARIO" : "PROFESIONAL";
             return {
+              message_id: msg.message_id,
               sender: `${roleLabel} - ${name}`,
               role: msg.sender_role,
               text: msg.text,
