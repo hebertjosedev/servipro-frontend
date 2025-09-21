@@ -11,7 +11,9 @@ export const useSession = () => {
   const [hasNewMessages, setHasNewMessages] = useState<Record<number, boolean>>({});
 
   // 💬 Estado de escritura por solicitud
-  const [typingStatus, setTypingStatus] = useState<Record<number, boolean>>({});
+  type TypingStatus = Record<number, { active: boolean; name?: string }>;
+  const [typingStatus, setTypingStatus] = useState<TypingStatus>({});
+
 
   // 📍 Chat activo
   const [activeRequestId, setActiveRequestId] = useState<number | null>(null);

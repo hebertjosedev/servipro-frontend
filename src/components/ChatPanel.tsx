@@ -94,9 +94,11 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="h-64 overflow-y-auto border rounded p-2 bg-gray-50">
-        {typingStatus[requestId] && (
+        {typingStatus[requestId]?.active && (
           <div className="text-sm italic text-gray-500 mb-2 text-left animate-pulse">
-            {currentUser.role === "user"
+            {typingStatus[requestId]?.name
+              ? `${typingStatus[requestId].name} está escribiendo...`
+              : currentUser.role === "user"
               ? "Profesional está escribiendo..."
               : "Usuario está escribiendo..."}
           </div>
