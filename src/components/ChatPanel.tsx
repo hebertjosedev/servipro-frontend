@@ -91,6 +91,8 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
     }
   };
 
+  console.log("🧠 Estado typingStatus:", typingStatus[requestId]);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="h-64 overflow-y-auto border rounded p-2 bg-gray-50">
