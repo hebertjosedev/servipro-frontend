@@ -57,7 +57,6 @@ export const useChatSocket = (requestId: number, token: string) => {
 
         // 💬 Evento de escritura
         else if (msg.type === "typing") {
-          console.log("✍️ Evento typing recibido:", msg);
           setTypingStatus((prev) => ({
             ...prev,
             [requestId]: {
