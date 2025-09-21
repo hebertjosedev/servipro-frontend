@@ -69,16 +69,18 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
   }, [requestId, token]);
 
   const sendMessage = () => {
+    const trimmed = input.trim();
+    if (!trimmed) {
+      console.warn("⚠️ Mensaje vacío no enviado");
+      return;
+    }
+
     const socket = socketRefs.current[requestId];
-    if (socket && input.trim()) {
-      const message = {
-        type: "chat",
-        text: input,
-      };
-      socket.send(JSON.stringify(message));
+    if (socket?.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ type: "chat", text: trimmed }));
       setInput("");
     } else {
-      console.warn("⚠️ No se envió: socket cerrado o input vacío");
+      console.warn("⚠️ No se envió: socket cerrado o inválido");
     }
   };
 
