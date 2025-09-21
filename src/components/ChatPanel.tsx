@@ -91,21 +91,9 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
     }
   };
 
-  console.log("🧠 Estado typingStatus:", typingStatus[requestId]);
-
   return (
     <div className="flex flex-col gap-4">
       <div className="h-64 overflow-y-auto border rounded p-2 bg-gray-50">
-        {typingStatus[requestId]?.active && (
-          <div className="text-sm italic text-gray-500 mb-2 text-left animate-pulse">
-            {typingStatus[requestId]?.name
-              ? `${typingStatus[requestId].name} está escribiendo...`
-              : currentUser.role === "user"
-              ? "Profesional está escribiendo..."
-              : "Usuario está escribiendo..."}
-          </div>
-        )}
-
         {messages
           .filter((msg) => msg.text && msg.text.trim() !== "")
           .map((msg, idx) => (
@@ -123,6 +111,16 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
               <small>{new Date(msg.timestamp).toLocaleTimeString()}</small>
             </div>
           ))}
+
+        {typingStatus[requestId]?.active && (
+          <div className="text-sm italic text-gray-500 mb-2 text-left animate-pulse">
+            {typingStatus[requestId]?.name
+              ? `${typingStatus[requestId].name} está escribiendo...`
+              : currentUser.role === "user"
+              ? "Profesional está escribiendo..."
+              : "Usuario está escribiendo..."}
+          </div>
+        )}
       </div>
       <div className="flex gap-2">
         <input
