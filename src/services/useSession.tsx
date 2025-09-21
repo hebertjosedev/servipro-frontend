@@ -37,12 +37,14 @@ export const useSession = () => {
     setChatMessages((prev) => {
       const existing = prev[requestId] || [];
 
-      const isDuplicate = existing.some(
-        (m) =>
-          m.text === message.text &&
-          m.sender === message.sender &&
-          m.timestamp === message.timestamp
-      );
+      const isDuplicate = existing.some((m) => m.message_id === message.message_id);
+
+      // const isDuplicate = existing.some(
+      //   (m) =>
+      //     m.text === message.text &&
+      //     m.sender === message.sender &&
+      //     m.timestamp === message.timestamp
+      // );
       if (isDuplicate) return prev;
 
       return {
