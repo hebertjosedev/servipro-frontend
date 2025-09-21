@@ -9,6 +9,7 @@ export interface Message {
   content: string;
   sender: string;
   timestamp: string;
+  sender_name?: string;
   text: string;
   sender_role: string;
   // agrega más campos si los tienes
