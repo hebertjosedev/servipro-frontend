@@ -5,7 +5,7 @@ import type { UserRequest } from "../interfaces/UserRequest";
 import ChatPanel from "./ChatPanel";
 
 const UserDashboard = () => {
-  const { token } = useSessionContext();
+  const { token, hasNewMessages } = useSessionContext();
   const [requests, setRequests] = useState<UserRequest[]>([]);
   const [activeChatRequestId, setActiveChatRequestId] = useState<number | null>(
     null
@@ -79,7 +79,7 @@ const UserDashboard = () => {
                     {req.status === "aceptada" && (
                       <>
                         <button
-                          className="btn"
+                          className="relative btn"
                           onClick={() => {
                             setActiveChatRequestId(req.id);
                             const dialog = document.getElementById(
@@ -89,7 +89,11 @@ const UserDashboard = () => {
                           }}
                         >
                           Chat
+                          {hasNewMessages[req.id] && (
+                            <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping" />
+                          )}
                         </button>
+
                         <dialog id={`chat_modal_${req.id}`} className="modal">
                           <div className="modal-box">
                             <h3 className="font-bold text-lg mb-4">

@@ -9,9 +9,10 @@ import type {
 import { useSessionContext } from "../services/SessionContext";
 import { useChatSocket } from "../hooks/useChatSockets";
 
+
 const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
   const [input, setInput] = useState("");
-  const { chatMessages, addMessage, socketRefs, typingStatus } =
+  const { chatMessages, addMessage, socketRefs, typingStatus, clearNewMessage } =
     useSessionContext();
   const messages = chatMessages[requestId] || [];
 
@@ -19,6 +20,8 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
 
   useEffect(() => {
     if (!token) return;
+
+    clearNewMessage(requestId);
 
     const fetchMessages = async () => {
       try {

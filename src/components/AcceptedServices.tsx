@@ -5,7 +5,7 @@ import type { ServiceRequestPublic } from "../interfaces/ServiceRequest";
 import ChatPanel from "./ChatPanel";
 
 const AcceptedServices = () => {
-  const { token } = useSessionContext();
+  const { token, hasNewMessages } = useSessionContext();
   const [requests, setRequests] = useState<ServiceRequestPublic[]>([]);
   const [activeChatRequestId, setActiveChatRequestId] = useState<number | null>(
     null
@@ -105,7 +105,7 @@ const AcceptedServices = () => {
                   <div className="flex gap-2 mt-4">
                     {/* Botón de Chat */}
                     <button
-                      className="btn btn-sm btn-secondary"
+                      className="relative btn btn-sm btn-secondary"
                       onClick={() => {
                         setActiveChatRequestId(req.id);
                         const dialog = document.getElementById(
@@ -115,7 +115,11 @@ const AcceptedServices = () => {
                       }}
                     >
                       Chat
+                      {hasNewMessages[req.id] && (
+                        <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping" />
+                      )}
                     </button>
+
                     <button
                       className="btn btn-sm btn-primary"
                       onClick={() => handleUpdateStatus(req.id, "finalize")}
