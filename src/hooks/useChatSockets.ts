@@ -30,6 +30,7 @@ export const useChatSocket = (requestId: number, token: string) => {
           typeof msg.role === "string"
         ) {
           addMessage(requestId, {
+            message_id: msg.message_id,
             sender: msg.sender,
             role: msg.role,
             text: msg.text,

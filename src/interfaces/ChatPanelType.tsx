@@ -16,6 +16,7 @@ export interface Message {
 }
 
 export interface DisplayMessage {
+  message_id: string;
   sender: string;
   role: string;
   text: string;
