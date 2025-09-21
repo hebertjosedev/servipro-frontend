@@ -38,12 +38,16 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
 
         const normalized: DisplayMessage[] = rawData
           .filter((msg: Message) => msg.text && msg.text.trim() !== "")
-          .map((msg: Message) => ({
-            sender: msg.sender,
-            role: msg.sender_role,
-            text: msg.text,
-            timestamp: msg.timestamp,
-          }));
+          .map((msg: Message) => {
+            const name = msg.sender_name || msg.sender?.split("@")[0] || "Desconocido";
+            const roleLabel = msg.sender_role === "user" ? "USUARIO" : "PROFESIONAL";
+            return {
+              sender: `${roleLabel} - ${name}`,
+              role: msg.sender_role,
+              text: msg.text,
+              timestamp: msg.timestamp,
+            };
+          });
 
         normalized.forEach((msg: DisplayMessage) => {
           addMessage(requestId, msg);
@@ -58,16 +62,12 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
 
   const sendMessage = () => {
     const socket = socketRefs.current[requestId];
-    console.log("📤 Intentando enviar:", input);
-    console.log("🔌 Estado del socket:", socket?.readyState);
-    console.log("🔌 Socket:", socket);
     if (socket && input.trim()) {
       const message = {
         type: "chat",
         text: input,
       };
       socket.send(JSON.stringify(message));
-      console.log("✅ Mensaje enviado:", message);
       setInput("");
     } else {
       console.warn("⚠️ No se envió: socket cerrado o input vacío");
