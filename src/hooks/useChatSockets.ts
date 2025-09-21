@@ -57,20 +57,25 @@ export const useChatSocket = (requestId: number, token: string) => {
 
         // 💬 Evento de escritura
         else if (msg.type === "typing") {
+          console.log("✍️ Evento typing recibido:", msg);
           setTypingStatus((prev) => ({
             ...prev,
-            [requestId]: true,
+            [requestId]: {
+              active: true,
+              name: msg.sender_name,
+            },
           }));
 
           setTimeout(() => {
             setTypingStatus((prev) => ({
               ...prev,
-              [requestId]: false,
+              [requestId]: {
+                active: false,
+                name: undefined,
+              },
             }));
           }, 3000);
-        }
-
-        else {
+        } else {
           console.warn("⚠️ Evento ignorado por tipo desconocido:", msg);
         }
       } catch (err) {
