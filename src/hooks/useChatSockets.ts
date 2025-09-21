@@ -14,21 +14,14 @@ export const useChatSocket = (requestId: number, token: string) => {
     );
 
     socketRefs.current[requestId] = socket;
-    console.log(
-      "📌 Socket registrado en socketRefs para requestId:",
-      requestId
-    );
 
     socket.onopen = () => {
-      console.log(`✅ WebSocket conectado para request ${requestId}`);
       socket.send(JSON.stringify({ type: "ping" }));
     };
 
     socket.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
-
-        console.log("📥 Mensaje recibido:", msg);
 
         if (
           msg.type === "chat" &&
