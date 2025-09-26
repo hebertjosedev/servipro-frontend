@@ -15,7 +15,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
     socketRefs,
     typingStatus,
     clearNewMessage,
-    presenceStatus
+    presenceStatus,
   } = useSessionContext();
   const messages = chatMessages[requestId] || [];
 
@@ -130,12 +130,6 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="h-64 overflow-y-auto border rounded p-2 bg-gray-50">
-        {presenceStatus[token] === "online" && (
-          <div className="flex items-center gap-2 text-sm text-green-600 mb-2">
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            En línea
-          </div>
-        )}
         {messages
           .filter((msg) => msg.text?.trim())
           .map((msg, idx) => (
@@ -169,19 +163,27 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
           </div>
         )}
       </div>
-      <div className="flex gap-2">
-        <input
-          value={input}
-          onChange={(e) => {
-            setInput(e.target.value);
-            handleTyping();
-          }}
-          className="flex-1 border rounded px-2"
-          placeholder="Escribe un mensaje..."
-        />
-        <button onClick={sendMessage} className="btn btn-sm btn-primary">
-          Enviar
-        </button>
+      <div className="flex flex-col gap-1">
+        {presenceStatus[token] === "online" && (
+          <div className="flex items-center gap-2 text-sm text-green-600">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            En línea
+          </div>
+        )}
+        <div className="flex gap-2 mt-1">
+          <input
+            value={input}
+            onChange={(e) => {
+              setInput(e.target.value);
+              handleTyping();
+            }}
+            className="flex-1 border rounded px-2"
+            placeholder="Escribe un mensaje..."
+          />
+          <button onClick={sendMessage} className="btn btn-sm btn-primary">
+            Enviar
+          </button>
+        </div>
       </div>
     </div>
   );
