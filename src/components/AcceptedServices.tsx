@@ -5,7 +5,7 @@ import type { ServiceRequestPublic } from "../interfaces/ServiceRequest";
 import ChatPanel from "./ChatPanel";
 
 const AcceptedServices = () => {
-  const { token, hasNewMessages } = useSessionContext();
+  const { token, hasNewMessages, presenceStatus } = useSessionContext();
   const [requests, setRequests] = useState<ServiceRequestPublic[]>([]);
   const [activeChatRequestId, setActiveChatRequestId] = useState<number | null>(
     null
@@ -130,9 +130,15 @@ const AcceptedServices = () => {
                     {/* Modal de Chat */}
                     <dialog id={`chat_modal_${req.id}`} className="modal">
                       <div className="modal-box">
-                        <h3 className="font-bold text-lg mb-4">
+                        <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
                           Chat con {req.user_full_name}
+                          {presenceStatus[req.id] === "online" && (
+                            <span className="text-green-600 text-sm font-normal">
+                              · en línea
+                            </span>
+                          )}
                         </h3>
+
                         {activeChatRequestId === req.id && token && (
                           <ChatPanel
                             requestId={req.id}

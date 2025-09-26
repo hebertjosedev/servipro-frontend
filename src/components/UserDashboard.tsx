@@ -5,7 +5,7 @@ import type { UserRequest } from "../interfaces/UserRequest";
 import ChatPanel from "./ChatPanel";
 
 const UserDashboard = () => {
-  const { token, hasNewMessages } = useSessionContext();
+  const { token, hasNewMessages, presenceStatus } = useSessionContext();
   const [requests, setRequests] = useState<UserRequest[]>([]);
   const [activeChatRequestId, setActiveChatRequestId] = useState<number | null>(
     null
@@ -96,8 +96,13 @@ const UserDashboard = () => {
 
                         <dialog id={`chat_modal_${req.id}`} className="modal">
                           <div className="modal-box">
-                            <h3 className="font-bold text-lg mb-4">
+                            <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
                               Chat con {req.professional_name}
+                              {presenceStatus?.[req.id] === "online" && (
+                                <span className="text-green-600 text-sm font-normal">
+                                  · en línea
+                                </span>
+                              )}
                             </h3>
 
                             {token && (
