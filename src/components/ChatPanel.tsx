@@ -30,7 +30,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
     fetch("https://notifier-node.onrender.com/api/presence", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token, status: "online" }),
+      body: JSON.stringify({ token, status: "online", requestId }),
     });
 
     const fetchMessages = async () => {
@@ -95,7 +95,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
       fetch("https://notifier-node.onrender.com/api/presence", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, status: "offline" }),
+        body: JSON.stringify({ token, status: "offline", requestId }),
       });
     };
   }, [requestId, token]);

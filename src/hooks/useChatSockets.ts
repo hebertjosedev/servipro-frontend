@@ -43,8 +43,9 @@ export const useChatSocket = (requestId: number, token: string) => {
 
     // 🎙️ Conexión secundaria (Node.js)
     const notifierSocket = new WebSocket(
-      `wss://notifier-node.onrender.com?token=${token}`
+      `wss://notifier-node.onrender.com?token=${token}&requestId=${requestId}`
     );
+
     notifierSocketRefs.current[requestId] = notifierSocket;
 
     notifierSocket.onmessage = (event) => {
