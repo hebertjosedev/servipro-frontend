@@ -30,7 +30,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
     fetch("https://notifier-node.onrender.com/api/presence", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token, status: "online", requestId }),
+      body: JSON.stringify({ token, status: "online" }),
     });
 
     const fetchMessages = async () => {
@@ -95,7 +95,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
       fetch("https://notifier-node.onrender.com/api/presence", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, status: "offline", requestId }),
+        body: JSON.stringify({ token, status: "offline" }),
       });
     };
   }, [requestId, token]);
@@ -130,7 +130,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="h-64 overflow-y-auto border rounded p-2 bg-gray-50">
-        {presenceStatus[requestId] === "online" && (
+        {presenceStatus[token] === "online" && (
           <div className="flex items-center gap-2 text-sm text-green-600 mb-2">
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
             En línea

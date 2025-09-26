@@ -23,7 +23,7 @@ export const useSession = () => {
   const chatIsOpen = (id: number) => activeRequestId === id;
 
   const [presenceStatus, setPresenceStatus] = useState<
-    Record<number, "online" | "offline">
+    Record<string, "online" | "offline">
   >({});
 
   // 🔌 WebSocket por solicitud

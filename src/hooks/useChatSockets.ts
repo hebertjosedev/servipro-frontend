@@ -54,7 +54,7 @@ export const useChatSocket = (requestId: number, token: string) => {
       fetch("https://notifier-node.onrender.com/api/presence", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, status: "online", requestId }),
+        body: JSON.stringify({ token, status: "online" }),
       });
     };
 
@@ -77,7 +77,7 @@ export const useChatSocket = (requestId: number, token: string) => {
         if (msg.type === "presence" && typeof msg.status === "string") {
           setPresenceStatus((prev) => ({
             ...prev,
-            [requestId]: msg.status === "online" ? "online" : "offline",
+            [token]: msg.status === "online" ? "online" : "offline",
           }));
         }
       } catch (err) {
