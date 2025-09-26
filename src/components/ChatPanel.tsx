@@ -1,27 +1,37 @@
-// components/ChatPanel.tsx
 import { useEffect, useState } from "react";
 import type {
   ChatPanelProps,
   DisplayMessage,
   Message,
 } from "../interfaces/ChatPanelType";
-// import { useSession } from "../services/useSession";
 import { useSessionContext } from "../services/SessionContext";
 import { useChatSocket } from "../hooks/useChatSockets";
 
-
 const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
   const [input, setInput] = useState("");
-  const { chatMessages, addMessage, socketRefs, typingStatus, clearNewMessage } =
-    useSessionContext();
+  const {
+    chatMessages,
+    addMessage,
+    socketRefs,
+    typingStatus,
+    clearNewMessage,
+    presenceStatus
+  } = useSessionContext();
   const messages = chatMessages[requestId] || [];
 
-  useChatSocket(requestId, token); // ← WebSocket persistente
+  useChatSocket(requestId, token); // 🎙️ WebSocket persistente
 
   useEffect(() => {
     if (!token) return;
 
     clearNewMessage(requestId);
+
+    // 🟢 Emitir presencia "online"
+    fetch("https://servipro-backend.onrender.com/api/presence", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, status: "online" }),
+    });
 
     const fetchMessages = async () => {
       try {
@@ -36,7 +46,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
           return;
         }
 
-        if (!contentType || !contentType.includes("application/json")) {
+        if (!contentType?.includes("application/json")) {
           const html = await res.text();
           console.error("❌ Respuesta no es JSON:", html);
           return;
@@ -45,7 +55,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
         const rawData = await res.json();
 
         const normalized: DisplayMessage[] = rawData
-          .filter((msg: Message) => msg.text && msg.text.trim() !== "")
+          .filter((msg: Message) => msg.text?.trim())
           .map((msg: Message) => {
             const name =
               msg.sender_name || msg.sender?.split("@")[0] || "Desconocido";
@@ -62,6 +72,16 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
 
         normalized.forEach((msg: DisplayMessage) => {
           addMessage(requestId, msg);
+
+          // ✅ Emitir "entregado" por cada mensaje recibido
+          fetch("https://servipro-backend.onrender.com/api/deliver", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              token,
+              messageId: msg.message_id,
+            }),
+          });
         });
       } catch (err) {
         console.error("❌ Error al cargar historial:", err);
@@ -69,6 +89,15 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
     };
 
     fetchMessages();
+
+    return () => {
+      // 🔴 Emitir presencia "offline"
+      fetch("https://servipro-backend.onrender.com/api/presence", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, status: "offline" }),
+      });
+    };
   }, [requestId, token]);
 
   const sendMessage = () => {
@@ -82,13 +111,16 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
     if (socket?.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify({ type: "chat", text: trimmed }));
       setInput("");
-      clearNewMessage(requestId); // ✅ Limpia al enviar
+      clearNewMessage(requestId);
     } else {
       console.warn("⚠️ No se envió: socket cerrado o inválido");
     }
   };
 
   const handleTyping = () => {
+    const trimmed = input.trim();
+    if (!trimmed) return;
+
     const socket = socketRefs.current[requestId];
     if (socket?.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify({ type: "typing" }));
@@ -98,8 +130,14 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="h-64 overflow-y-auto border rounded p-2 bg-gray-50">
+        {presenceStatus[requestId] === "online" && (
+          <div className="flex items-center gap-2 text-sm text-green-600 mb-2">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            En línea
+          </div>
+        )}
         {messages
-          .filter((msg) => msg.text && msg.text.trim() !== "")
+          .filter((msg) => msg.text?.trim())
           .map((msg, idx) => (
             <div
               key={idx}
@@ -112,7 +150,12 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
               <strong>{msg.sender?.toUpperCase() || "Desconocido"}:</strong>{" "}
               {msg.text}
               <br />
-              <small>{new Date(msg.timestamp).toLocaleTimeString()}</small>
+              <small>
+                {new Date(msg.timestamp).toLocaleTimeString()}
+                {msg.delivered && (
+                  <span className="ml-1 text-green-500">✔</span>
+                )}
+              </small>
             </div>
           ))}
 
@@ -131,7 +174,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
           value={input}
           onChange={(e) => {
             setInput(e.target.value);
-            handleTyping(); // 💬 Emitir evento
+            handleTyping();
           }}
           className="flex-1 border rounded px-2"
           placeholder="Escribe un mensaje..."

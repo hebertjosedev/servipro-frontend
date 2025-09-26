@@ -8,6 +8,8 @@ export const useChatSocket = (requestId: number, token: string) => {
     markNewMessage,
     setTypingStatus,
     chatIsOpen,
+    setPresenceStatus,
+    setChatMessages,
   } = useSessionContext();
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export const useChatSocket = (requestId: number, token: string) => {
       try {
         const msg = JSON.parse(event.data);
 
+        // 💬 Mensaje de chat
         if (
           msg.type === "chat" &&
           msg.text?.trim() &&
@@ -49,7 +52,6 @@ export const useChatSocket = (requestId: number, token: string) => {
             timestamp: msg.timestamp || new Date().toISOString(),
           });
 
-          // 🔔 Notificación si el chat no está abierto
           if (!chatIsOpen(requestId)) {
             markNewMessage(requestId);
           }
@@ -74,7 +76,30 @@ export const useChatSocket = (requestId: number, token: string) => {
               },
             }));
           }, 3000);
-        } else {
+        }
+
+        // ✅ Evento de entrega
+        else if (msg.type === "entregado" && msg.messageId) {
+          setChatMessages((prev) => {
+            const updated = { ...prev };
+            const msgs = updated[requestId] || [];
+            updated[requestId] = msgs.map((m) =>
+              m.message_id === msg.messageId ? { ...m, delivered: true } : m
+            );
+            return updated;
+          });
+        }
+
+        // 🟢 Evento de presencia
+        else if (msg.type === "presence" && typeof msg.status === "string") {
+          setPresenceStatus((prev) => ({
+            ...prev,
+            [requestId]: msg.status === "online" ? "online" : "offline",
+          }));
+        }
+
+        // ⚠️ Evento desconocido
+        else {
           console.warn("⚠️ Evento ignorado por tipo desconocido:", msg);
         }
       } catch (err) {

@@ -22,4 +22,5 @@ export interface DisplayMessage {
   role: string;
   text: string;
   timestamp: string;
+  delivered?: boolean;
 }
