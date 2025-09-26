@@ -4,6 +4,7 @@ import { useSessionContext } from "../services/SessionContext";
 export const useChatSocket = (requestId: number, token: string) => {
   const {
     socketRefs,
+    notifierSocketRefs,
     addMessage,
     markNewMessage,
     setTypingStatus,
@@ -13,22 +14,61 @@ export const useChatSocket = (requestId: number, token: string) => {
   } = useSessionContext();
 
   useEffect(() => {
-    if (!token || !requestId || !socketRefs?.current) return;
+    if (!token || !requestId || !socketRefs?.current || !notifierSocketRefs?.current) return;
 
-    // 🧼 Cierra socket anterior si existe
+    // 🧼 Cierra sockets anteriores si existen
     const existingSocket = socketRefs.current[requestId];
     if (existingSocket) {
       existingSocket.close();
       delete socketRefs.current[requestId];
     }
 
-    // 🎙️ Crea nuevo socket
+    const existingNotifier = notifierSocketRefs.current[requestId];
+    if (existingNotifier) {
+      existingNotifier.close();
+      delete notifierSocketRefs.current[requestId];
+    }
+
+    // 🎙️ Conexión principal (FastAPI)
     const socket = new WebSocket(
       `wss://servipro-backend-production.up.railway.app/api/v1/requests/ws/chat/${requestId}?token=${token}`
     );
-
     socketRefs.current[requestId] = socket;
 
+    // 🎙️ Conexión secundaria (Node.js)
+    const notifierSocket = new WebSocket(
+      `wss://notifier-node.onrender.com?token=${token}`
+    );
+    notifierSocketRefs.current[requestId] = notifierSocket;
+
+    // 📡 Escuchar eventos del microservicio
+    notifierSocket.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+
+        if (msg.type === "entregado" && msg.messageId) {
+          setChatMessages((prev) => {
+            const updated = { ...prev };
+            const msgs = updated[requestId] || [];
+            updated[requestId] = msgs.map((m) =>
+              m.message_id === msg.messageId ? { ...m, delivered: true } : m
+            );
+            return updated;
+          });
+        }
+
+        if (msg.type === "presence" && typeof msg.status === "string") {
+          setPresenceStatus((prev) => ({
+            ...prev,
+            [requestId]: msg.status === "online" ? "online" : "offline",
+          }));
+        }
+      } catch (err) {
+        console.error("❌ Error al parsear mensaje de notifier:", err);
+      }
+    };
+
+    // 📡 Escuchar eventos del backend principal
     socket.onopen = () => {
       socket.send(JSON.stringify({ type: "ping" }));
     };
@@ -37,7 +77,6 @@ export const useChatSocket = (requestId: number, token: string) => {
       try {
         const msg = JSON.parse(event.data);
 
-        // 💬 Mensaje de chat
         if (
           msg.type === "chat" &&
           msg.text?.trim() &&
@@ -55,10 +94,7 @@ export const useChatSocket = (requestId: number, token: string) => {
           if (!chatIsOpen(requestId)) {
             markNewMessage(requestId);
           }
-        }
-
-        // 💬 Evento de escritura
-        else if (msg.type === "typing") {
+        } else if (msg.type === "typing") {
           setTypingStatus((prev) => ({
             ...prev,
             [requestId]: {
@@ -76,10 +112,7 @@ export const useChatSocket = (requestId: number, token: string) => {
               },
             }));
           }, 3000);
-        }
-
-        // ✅ Evento de entrega
-        else if (msg.type === "entregado" && msg.messageId) {
+        } else if (msg.type === "entregado" && msg.messageId) {
           setChatMessages((prev) => {
             const updated = { ...prev };
             const msgs = updated[requestId] || [];
@@ -88,18 +121,12 @@ export const useChatSocket = (requestId: number, token: string) => {
             );
             return updated;
           });
-        }
-
-        // 🟢 Evento de presencia
-        else if (msg.type === "presence" && typeof msg.status === "string") {
+        } else if (msg.type === "presence" && typeof msg.status === "string") {
           setPresenceStatus((prev) => ({
             ...prev,
             [requestId]: msg.status === "online" ? "online" : "offline",
           }));
-        }
-
-        // ⚠️ Evento desconocido
-        else {
+        } else {
           console.warn("⚠️ Evento ignorado por tipo desconocido:", msg);
         }
       } catch (err) {
@@ -121,6 +148,12 @@ export const useChatSocket = (requestId: number, token: string) => {
       if (socket) {
         socket.close();
         delete socketRefs.current[requestId];
+      }
+
+      const notifier = notifierSocketRefs.current?.[requestId];
+      if (notifier) {
+        notifier.close();
+        delete notifierSocketRefs.current[requestId];
       }
     };
   }, [requestId, token]);

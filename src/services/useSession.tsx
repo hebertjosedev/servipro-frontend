@@ -29,6 +29,10 @@ export const useSession = () => {
   // 🔌 WebSocket por solicitud
   const socketRefs = useRef<Record<number, WebSocket>>({});
 
+  // referencia para nodejs
+  const notifierSocketRefs = useRef<Record<number, WebSocket>>({});
+
+
   // 🔐 Autenticación
   const { user, token: userToken, logout: logoutUser, setUser } = useAuth();
   const {
@@ -111,6 +115,7 @@ export const useSession = () => {
     addMessage,
     clearMessages,
     socketRefs,
+    notifierSocketRefs,
     hasNewMessages,
     markNewMessage,
     clearNewMessage,
