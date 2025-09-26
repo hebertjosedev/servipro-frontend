@@ -14,7 +14,13 @@ export const useChatSocket = (requestId: number, token: string) => {
   } = useSessionContext();
 
   useEffect(() => {
-    if (!token || !requestId || !socketRefs?.current || !notifierSocketRefs?.current) return;
+    if (
+      !token ||
+      !requestId ||
+      !socketRefs?.current ||
+      !notifierSocketRefs?.current
+    )
+      return;
 
     // 🧼 Cierra sockets anteriores si existen
     const existingSocket = socketRefs.current[requestId];
@@ -41,7 +47,6 @@ export const useChatSocket = (requestId: number, token: string) => {
     );
     notifierSocketRefs.current[requestId] = notifierSocket;
 
-    // 📡 Escuchar eventos del microservicio
     notifierSocket.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
