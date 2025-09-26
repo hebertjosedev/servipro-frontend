@@ -132,7 +132,7 @@ const AcceptedServices = () => {
                       <div className="modal-box">
                         <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
                           Chat con {req.user_full_name}
-                          {presenceStatus[req.id] === "online" && (
+                          {presenceStatus?.[req.id] === "online" && (
                             <span className="text-green-600 text-sm font-normal">
                               · en línea
                             </span>
