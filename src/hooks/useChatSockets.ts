@@ -48,6 +48,16 @@ export const useChatSocket = (requestId: number, token: string) => {
 
     notifierSocketRefs.current[requestId] = notifierSocket;
 
+    notifierSocket.onopen = () => {
+      console.log("✅ Notifier conectado");
+
+      fetch("https://notifier-node.onrender.com/api/presence", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, status: "online", requestId }),
+      });
+    };
+
     notifierSocket.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
