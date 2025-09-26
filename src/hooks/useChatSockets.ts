@@ -49,7 +49,6 @@ export const useChatSocket = (requestId: number, token: string) => {
     notifierSocketRefs.current[requestId] = notifierSocket;
 
     notifierSocket.onopen = () => {
-      console.log("✅ Notifier conectado");
 
       fetch("https://notifier-node.onrender.com/api/presence", {
         method: "POST",
@@ -61,7 +60,6 @@ export const useChatSocket = (requestId: number, token: string) => {
     notifierSocket.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
-        console.log("📥 Evento recibido:", msg);
 
         if (msg.type === "entregado" && msg.messageId) {
           setChatMessages((prev) => {
