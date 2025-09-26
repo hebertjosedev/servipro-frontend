@@ -51,6 +51,7 @@ export const useChatSocket = (requestId: number, token: string) => {
     notifierSocket.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
+        console.log("📥 Evento recibido:", msg);
 
         if (msg.type === "entregado" && msg.messageId) {
           setChatMessages((prev) => {
