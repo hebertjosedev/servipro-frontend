@@ -74,14 +74,13 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
           addMessage(requestId, msg);
 
           // ✅ Emitir "entregado" por cada mensaje recibido
-          fetch("https://notifier-node.onrender.com/api/deliver", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              token,
-              messageId: msg.message_id,
-            }),
-          });
+          if (!msg.delivered) {
+            fetch("https://notifier-node.onrender.com/api/deliver", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ token, messageId: msg.message_id }),
+            });
+          }
         });
       } catch (err) {
         console.error("❌ Error al cargar historial:", err);
