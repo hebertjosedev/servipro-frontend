@@ -27,7 +27,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
     clearNewMessage(requestId);
 
     // 🟢 Emitir presencia "online"
-    fetch("https://servipro-backend.onrender.com/api/presence", {
+    fetch("https://notifier-node.onrender.com/api/presence", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token, status: "online" }),
@@ -74,7 +74,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
           addMessage(requestId, msg);
 
           // ✅ Emitir "entregado" por cada mensaje recibido
-          fetch("https://servipro-backend.onrender.com/api/deliver", {
+          fetch("https://notifier-node.onrender.com/api/deliver", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -92,7 +92,7 @@ const ChatPanel = ({ requestId, currentUser, token }: ChatPanelProps) => {
 
     return () => {
       // 🔴 Emitir presencia "offline"
-      fetch("https://servipro-backend.onrender.com/api/presence", {
+      fetch("https://notifier-node.onrender.com/api/presence", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, status: "offline" }),
